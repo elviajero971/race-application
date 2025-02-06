@@ -21,7 +21,6 @@ module Api
         if race_form.save
           render json: race_form.race.to_json(include: { race_participants: { include: :user } }), status: :created
         else
-          puts "errors #{race_form.errors}"
           render json: { errors: race_form.errors.full_messages }, status: :unprocessable_entity
         end
       end
@@ -32,7 +31,6 @@ module Api
         if race_form.update
           render json: @race.to_json(include: { race_participants: { include: :user } }), status: :ok
         else
-          puts "errors #{race_form.errors.full_messages}"
           render json: { errors: race_form.errors.full_messages }, status: :unprocessable_entity
         end
       end
@@ -40,7 +38,7 @@ module Api
       # DELETE /api/v1/races/:id
       def destroy
         @race.destroy
-        head :no_content
+        render json: { message: "Race deleted successfully" }, status: :ok
       end
 
       private

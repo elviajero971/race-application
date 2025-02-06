@@ -65,4 +65,17 @@ export const updateRace = async (id, raceData) => {
     }
 };
 
+export const deleteRace = async (id) => {
+    try {
+        const response = await fetch(`/api/v1/races/${id}`, { method: 'DELETE' });
+        if (!response.ok) {
+            throw new Error('Error deleting race');
+        }
+        return await response.json();
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 

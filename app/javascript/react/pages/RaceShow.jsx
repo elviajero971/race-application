@@ -51,13 +51,13 @@ const RaceShow = () => {
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                     onClick={() => navigate('/')}
                 >
-                    Back to Races
+                    Back to all races
                 </button>
                 <button
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                     onClick={() => navigate(`/races/${race.id}/edit`)}
                 >
-                    Edit Race
+                    Edit the race
                 </button>
             </div>
         </div>

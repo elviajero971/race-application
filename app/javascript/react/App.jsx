@@ -17,7 +17,7 @@ const App = () => {
                         Races
                     </Link>
                     <Link to="/races/new" className="mx-2 text-blue-500 hover:underline">
-                        Create a New Race
+                        Create a new race
                     </Link>
                 </nav>
                 <Routes>

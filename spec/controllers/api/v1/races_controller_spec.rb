@@ -222,7 +222,9 @@ RSpec.describe Api::V1::RacesController, type: :controller do
 
     it "returns no content" do
       delete :destroy, params: { id: race.id }
-      expect(response).to have_http_status(:no_content)
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json["message"]).to eq "Race deleted successfully"
     end
   end
 end
