@@ -26,6 +26,34 @@
 #     en:
 #       "yes": yup
 #       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  activemodel:
+    attributes:
+      races/race_form:
+        status: "Status"
+        title: "Title"
+        start_date: "Start Date"
+        race_participants_attributes: "Participants"
+    errors:
+      models:
+        races/race_form:
+          attributes:
+            title:
+              blank: "can't be blank"
+              too_short: "is too short (minimum is %{count} characters)"
+              too_long: "is too long (maximum is %{count} characters)"
+            start_date:
+              blank: "can't be blank"
+            status:
+              blank: "can't be blank"
+              inclusion: "must be either 'pending' or 'completed'"
+          custom:
+            race_participants:
+              at_least_two: "Race must have at least 2 participants"
+              missing_user: "All participants must have a user"
+              duplicate_user: "Participants must be different users"
+              missing_lane: "All participants must have a lane"
+              duplicate_lane: "Each participant must have a unique lane"
+              valid_rankings: "All participants must have a valid ranking like 1, 2, 3, 4, 4, 5..."
+              blank_rankings: "All participants must have a position"
+
