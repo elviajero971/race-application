@@ -36,13 +36,21 @@ RSpec.describe Races::RaceForm, type: :model do
     end
 
     context 'common validations' do
+      let(:invalid_attributes) do
+        {
+          status: 'pending',
+          title: 'Melbourne Highschool race',
+          start_date: Date.today,
+          race_participants_attributes: [
+            { user_id: @user1.id, lane: 1 }
+          ]
+        }
+      end
       context 'when there are less than 2 participants' do
         it 'is not valid' do
-          attrs = valid_attributes.deep_dup
-          attrs[:race_participants_attributes] = [{ user_id: @user1.id, lane: 1 }]
-          form = described_class.new(attrs)
+          form = described_class.new(invalid_attributes)
           expect(form).not_to be_valid(:create)
-          expect(form.errors[:race_participants_attributes]).to include("must have at least 2 participants")
+          expect(form.errors[:race_participants_attributes]).to include("Race must have at least 2 participants")
         end
       end
 
@@ -130,6 +138,19 @@ RSpec.describe Races::RaceForm, type: :model do
       }
     end
 
+    let(:invalid_update_attributes_with_same_user) do
+      {
+        status: 'completed',
+        title: 'Updated Title',
+        start_date: Date.today,
+        race_participants_attributes: [
+          { user_id: @user1.id, lane: 1, position: 1 },
+          { user_id: @user1.id, lane: 2, position: 2 },
+          { user_id: @user3.id, lane: 3, position: 3 }
+        ]
+      }
+    end
+
     context 'with valid update attributes' do
       it 'is valid when all participants have positions forming a contiguous range' do
         form = described_class.new(valid_update_attributes.merge(race: race))
@@ -164,13 +185,12 @@ RSpec.describe Races::RaceForm, type: :model do
           attrs[:race_participants_attributes][0][:position] = 0
           form = described_class.new(attrs.merge(race: race))
           expect(form).not_to be_valid(:update)
-          expect(form.errors[:race_participants_attributes]).to include("Positions must be at least 1")
+          expect(form.errors[:race_participants_attributes]).to include("All participants must have a valid ranking like 1, 2, 3, 4, 4, 5...")
         end
       end
 
       context 'when positions do not form a contiguous range' do
         it 'is not valid' do
-          # For example: With 3 participants, valid positions must range from 1 to 3.
           attrs = {
             status: 'completed',
             title: 'Updated Title',
@@ -183,7 +203,7 @@ RSpec.describe Races::RaceForm, type: :model do
           }
           form = described_class.new(attrs.merge(race: race))
           expect(form).not_to be_valid(:update)
-          expect(form.errors[:race_participants_attributes]).to include("Positions must range from 1 to 3")
+          expect(form.errors[:race_participants_attributes]).to include("All participants must have a valid ranking like 1, 2, 3, 4, 4, 5...")
         end
       end
 
@@ -202,7 +222,7 @@ RSpec.describe Races::RaceForm, type: :model do
           attrs[:race_participants_attributes] = [{ user_id: @user1.id, lane: 1, position: 1 }]
           form = described_class.new(attrs.merge(race: race))
           expect(form).not_to be_valid(:update)
-          expect(form.errors[:race_participants_attributes]).to include("must have at least 2 participants")
+          expect(form.errors[:race_participants_attributes]).to include("Race must have at least 2 participants")
         end
       end
 

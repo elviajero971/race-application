@@ -7,21 +7,22 @@ module Api
       # GET /api/v1/races
       def index
         @races = Race.all
-        render json: @races.to_json(include: :race_participants), status: :ok
+        render json: @races.to_json(include: { race_participants: { include: :user } }), status: :ok
       end
 
       # GET /api/v1/races/:id
       def show
-        render json: @race.to_json(include: :race_participants), status: :ok
+        render json: @race.to_json(include: { race_participants: { include: :user } }), status: :ok
       end
 
       # POST /api/v1/races
       def create
         race_form = Races::RaceForm.new(race_params)
         if race_form.save
-          render json: race_form.race.to_json(include: :race_participants), status: :created
+          render json: race_form.race.to_json(include: { race_participants: { include: :user } }), status: :created
         else
-          render json: { errors: race_form.errors.messages }, status: :unprocessable_entity
+          puts "errors #{race_form.errors}"
+          render json: { errors: race_form.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -29,9 +30,10 @@ module Api
       def update
         race_form = Races::RaceForm.new(race_params.merge(race: @race))
         if race_form.update
-          render json: @race.to_json(include: :race_participants), status: :ok
+          render json: @race.to_json(include: { race_participants: { include: :user } }), status: :ok
         else
-          render json: { errors: race_form.errors.messages }, status: :unprocessable_entity
+          puts "errors #{race_form.errors.full_messages}"
+          render json: { errors: race_form.errors.full_messages }, status: :unprocessable_entity
         end
       end
 
@@ -49,7 +51,7 @@ module Api
         render json: { error: "Race not found" }, status: :not_found
       end
 
-      # Strong parameters allowing nested race participants
+      # Strong parameters allowing nested race participants.
       def race_params
         params.require(:race).permit(
           :status,

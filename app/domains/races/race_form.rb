@@ -14,16 +14,15 @@ module Races
     validates :title, presence: true, length: { minimum: 3, maximum: 255 }
     validates :start_date, presence: true
 
+    # Run common validations in create and update
     validate :validate_create_conditions, on: :create
-
     validate :validate_update_conditions, on: :update
 
     def save
       return false unless valid?(:create)
-
       @race = Race.new(race_params)
       unless @race.save
-        errors.add(:base, @race.errors.messages.to_sentence)
+        errors.add(:base, @race.errors.full_messages.to_sentence)
         return false
       end
       true
@@ -31,11 +30,10 @@ module Races
 
     def update
       return false unless valid?(:update)
-
       if race.update(race_params)
         true
       else
-        errors.add(:base, race.errors.messages.to_sentence)
+        errors.add(:base, race.errors.full_messages.to_sentence)
         false
       end
     end
@@ -55,26 +53,9 @@ module Races
     # Create validations
     # -------------------------
     def validate_create_conditions
-      # 1. Must have at least 2 participants.
-      if race_participants_attributes.blank? || race_participants_attributes.size < 2
-        errors.add(:race_participants_attributes, "must have at least 2 participants")
-      end
-
-      # 2. All participants must have a user_id, and all user_ids must be unique.
-      user_ids = race_participants_attributes.map { |h| h[:user_id] || h["user_id"] }
-      if user_ids.any?(&:blank?)
-        errors.add(:race_participants_attributes, "All participants must have a user")
-      elsif user_ids.uniq.size != user_ids.size
-        errors.add(:race_participants_attributes, "Participants must be different users")
-      end
-
-      # 3. All participants must have a lane and each lane must be unique.
-      lanes = race_participants_attributes.map { |h| h[:lane] || h["lane"] }
-      if lanes.any?(&:blank?)
-        errors.add(:race_participants_attributes, "All participants must have a lane")
-      elsif lanes.uniq.size != lanes.size
-        errors.add(:race_participants_attributes, "Each participant must have a unique lane")
-      end
+      validates_number_of_participants
+      validates_users_uniqueness
+      validates_lanes_uniqueness
     end
 
     # -------------------------
@@ -83,28 +64,37 @@ module Races
     def validate_update_conditions
       validate_create_conditions
 
-      # In update, we assume the race already exists and we’re updating results.
-      # 1. Every participant must have a position.
       positions = race_participants_attributes.map { |h| h[:position] || h["position"] }
-
-      if positions.any? { |p| p.blank? }
-        errors.add(:race_participants_attributes, "All participants must have a position")
-        return
+      array_of_errors = Races::RankingValidator.new(positions).call
+      if array_of_errors.any?
+        array_of_errors.each do |attribute, message|
+          errors.add(attribute, message)
+        end
       end
 
-      # 2. All positions must be numeric and at least 1.
-      positions = positions.map(&:to_i)
-      if positions.any? { |p| p < 1 }
-        errors.add(:race_participants_attributes, "Positions must be at least 1")
-      end
+    end
 
-      # 3. Check the contiguous range rule:
-      #    The minimum position must be 1 and the maximum must equal the total number of participants.
-      min = positions.min
-      max = positions.max
-      count = positions.size
-      unless min == 1 && max == count
-        errors.add(:race_participants_attributes, "Positions must range from 1 to #{count}")
+    def validates_number_of_participants
+      if race_participants_attributes.blank? || race_participants_attributes.size < 2
+        errors.add(:race_participants_attributes, I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.at_least_two'))
+      end
+    end
+
+    def validates_users_uniqueness
+      user_ids = race_participants_attributes.map { |h| h[:user_id] || h["user_id"] }
+      if user_ids.any?(&:blank?)
+        errors.add(:race_participants_attributes, I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.missing_user'))
+      elsif user_ids.uniq.size != user_ids.size
+        errors.add(:race_participants_attributes, I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.duplicate_user'))
+      end
+    end
+
+    def validates_lanes_uniqueness
+      lanes = race_participants_attributes.map { |h| h[:lane] || h["lane"] }
+      if lanes.any?(&:blank?)
+        errors.add(:race_participants_attributes, I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.missing_lane'))
+      elsif lanes.uniq.size != lanes.size
+        errors.add(:race_participants_attributes, I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.duplicate_lane'))
       end
     end
   end
