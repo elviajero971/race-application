@@ -81,13 +81,34 @@ module Races
     end
 
     def validates_users_uniqueness
-      user_ids = race_participants_attributes.map { |h| h[:user_id] || h["user_id"] }
+      user_ids = race_participants_attributes.map { |h| h[:user_id] || h["user_id"] }.map(&:to_i)
+
       if user_ids.any?(&:blank?)
-        errors.add(:race_participants_attributes, I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.missing_user'))
-      elsif user_ids.uniq.size != user_ids.size
-        errors.add(:race_participants_attributes, I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.duplicate_user'))
+        errors.add(
+          :race_participants_attributes,
+          I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.missing_user')
+        )
+      end
+
+      # Check that each user_id corresponds to a valid User.
+      invalid_ids = user_ids.reject(&:blank?).reject { |uid| User.exists?(id: uid) }
+      if invalid_ids.any?
+        errors.add(
+          :race_participants_attributes,
+          I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.invalid_user', user_ids: invalid_ids.join(", "))
+        )
+      end
+
+      # Check for duplicate user_ids.
+      duplicates = user_ids.group_by { |uid| uid }.select { |_, v| v.size > 1 }.keys
+      if duplicates.any?
+        errors.add(
+          :race_participants_attributes,
+          I18n.t('activemodel.errors.models.races/race_form.custom.race_participants.duplicate_user', user_ids: duplicates.join(", "))
+        )
       end
     end
+
 
     def validates_lanes_uniqueness
       lanes = race_participants_attributes.map { |h| h[:lane] || h["lane"] }
