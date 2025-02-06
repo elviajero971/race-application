@@ -49,11 +49,12 @@ en:
               inclusion: "must be either 'pending' or 'completed'"
           custom:
             race_participants:
-              at_least_two: "Race must have at least 2 participants"
-              missing_user: "All participants must have a user"
-              duplicate_user: "Participants must be different users"
-              missing_lane: "All participants must have a lane"
-              duplicate_lane: "Each participant must have a unique lane"
-              valid_rankings: "All participants must have a valid ranking like 1, 2, 3, 4, 4, 5..."
-              blank_rankings: "All participants must have a position"
+              at_least_two: "must be at least 2 per race"
+              missing_user: "must have a registered user"
+              invalid_user: "must be a valid user"
+              duplicate_user: "must each be a different user"
+              missing_lane: "must have a lane"
+              duplicate_lane: "must have a unique lane"
+              valid_rankings: "must have a valid ranking like 1, 2, 3, 4, 4, 5..."
+              blank_rankings: "must have a position"
 
