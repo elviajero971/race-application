@@ -15,8 +15,22 @@ puts "Created #{User.count} users."
 # ------------------------------
 # Group A: 3 Completed Races (Past Races)
 # ------------------------------
+# Define a mapping from number of participants to a specific positions array.
+# You can customize these arrays as needed.
+completed_positions = {
+  2 => [1, 2],
+  3 => [1, 2, 3],
+  4 => [1, 2, 2, 4],
+  5 => [1, 1, 3, 4, 5],
+  6 => [1, 2, 2, 4, 5, 6],
+  7 => [1, 2, 3, 4, 5, 6, 7],
+  8 => [1, 2, 2, 4, 5, 6, 7, 7],
+  9 => [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  10 => [1, 2, 2, 4, 5, 6, 6, 8, 9, 10]
+}
+
 3.times do |i|
-  # Determine a random number of participants for this race (between 2 and 10)
+  # Determine a random number of participants (between 2 and 10) for this race.
   num_participants = rand(2..10)
 
   race = Race.create!(
@@ -26,15 +40,11 @@ puts "Created #{User.count} users."
   )
   puts "Created Completed Race #{race.id} with status: #{race.status} and #{num_participants} participants"
 
-  # Select distinct users for the race.
+  # Select exactly num_participants distinct users for this race.
   selected_users = users.sample(num_participants)
 
-  # Generate a random positions array for this race:
-  # Create an array of random numbers between 1 and num_participants.
-  positions = Array.new(num_participants) { rand(1..num_participants) }
-  # Force the first element to 1 and the last element to num_participants
-  positions[0] = 1
-  positions[-1] = num_participants
+  # Look up the positions array from our mapping. If not defined, default to a simple range.
+  positions = completed_positions[num_participants] || (1..num_participants).to_a
 
   # Create race participants with sequential lanes.
   selected_users.each_with_index do |user, index|
