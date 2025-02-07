@@ -1,39 +1,98 @@
-name: CI
+name: Deploy Rails App with Nginx
 
 on:
-  pull_request:
   push:
-    branches: [ main ]
+    branches:
+      - master
 
 jobs:
-  scan_ruby:
+  deploy:
+    name: Build and Deploy Rails App
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+      - name: Set up Docker Buildx
+        run: docker buildx create --use
 
-      - name: Scan for common Rails security vulnerabilities using static analysis
-        run: bin/brakeman --no-pager
+      # Build and push Docker image to Docker Hub
+      - name: Build and Push Docker Image
+        env:
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
+        run: |
+          docker login -u elviajero34 -p $DOCKERHUB_PASSWORD
+          docker buildx build --platform linux/arm/v7 \
+          --build-arg RAILS_MASTER_KEY=$RAILS_MASTER_KEY \
+          --build-arg SECRET_KEY_BASE=$SECRET_KEY_BASE \
+          --tag elviajero34/race:latest . \
+          --push
+      
+      
+      
+      # Transfer docker-compose.yml and nginx.conf to Raspberry Pi
+      - name: Transfer docker-compose.yml to Raspberry Pi
+        env:
+          RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
+          RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
+        run: |
+          # Transfer the docker-compose.yml file to the Raspberry Pi
+          sshpass -p $RASPBERRY_PI_PASSWORD scp -o StrictHostKeyChecking=no docker-compose.yml pi@$RASPBERRY_PI_IP:/var/www/html/race/
+      - name: Transfer nginx.conf to Raspberry Pi
+        env:
+          RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
+          RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
+        run: |
+          # Transfer the nginx.conf file to the Raspberry Pi
+          sshpass -p $RASPBERRY_PI_PASSWORD scp -o StrictHostKeyChecking=no nginx.conf pi@$RASPBERRY_PI_IP:/var/www/html/race/
 
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # Deploy to Raspberry Pi
+      - name: SSH into Raspberry Pi and deploy
+        env:
+          RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
+          RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
+        run: |
+          sshpass -p $RASPBERRY_PI_PASSWORD ssh -o StrictHostKeyChecking=no \
+          -o ServerAliveInterval=120 -o ServerAliveCountMax=100 pi@$RASPBERRY_PI_IP \
+          "bash -s" << 'EOF'
+            # Pull the latest image from Docker Hub
+            echo "Pulling the latest Docker image from Docker Hub..."
+            if ! docker pull elviajero34/race:latest; then
+              echo "Failed to pull Docker image from Docker Hub."
+              exit 1
+            fi
+          
+            # Remove old images except for the latest
+            echo "Cleaning up old Docker images..."
+            docker image prune -af --filter "label!=maintainer=elviajero34" || true
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: .ruby-version
-          bundler-cache: true
+            # Navigate to the app directory
+            echo "Navigating to the app directory..."
+            cd /var/www/html/race
 
-      - name: Lint code for consistent style
-        run: bin/rubocop -f github
+            # Ensure Docker is installed
+            echo "Installing Docker..."
+            if ! [ -x "$(command -v docker)" ]; then
+              curl -fsSL https://get.docker.com -o get-docker.sh
+              sh get-docker.sh
+            fi
 
+            # Stop and remove old containers
+            echo "Stopping and removing old containers..."
+            docker-compose down --remove-orphans || true
+
+            # Start the new containers
+            echo "Starting the new containers..."
+            docker-compose up -d
+          
+            # Create a new database if it doesn't exist
+            echo "Creating a new database..."
+            docker exec race-app-1 bundle exec rake db:create RAILS_ENV=production
+          
+            # Run database migrations
+            echo "Running database migrations..."
+            docker exec race-app-1 bundle exec rake db:migrate RAILS_ENV=production
+          EOF
