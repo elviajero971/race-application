@@ -12,10 +12,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     sqlite3 \
     libsqlite3-dev \
     pkg-config \
+    chromium \
+    chromium-driver \
     && curl -sL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g yarn \
     && rm -rf /var/lib/apt/lists/*
+
+
+# Set CHROME_BIN to point to Chromium
+ENV CHROME_BIN=/usr/bin/chromium
 
 # Copy Gemfile and Gemfile.lock
 COPY Gemfile Gemfile.lock ./
