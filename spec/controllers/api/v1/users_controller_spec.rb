@@ -140,16 +140,33 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
   describe "DELETE #destroy" do
     before do
-      @user = create(:user)
+      @user1 = create(:user, name: "Alice")
+      @user2 = create(:user, name: "Bob")
     end
 
     it "deletes the user" do
+      expect(User.count).to eq(2)
+
+      delete :destroy, params: { id: @user1.id }
+
+      expect(response).to have_http_status(:ok)
       expect(User.count).to eq(1)
+    end
 
-      delete :destroy, params: { id: @user.id }
+    it 'does not delete the user when the user is inside a race' do
+      @race = create(:race, title: "Race", start_date: 3.days.ago, status: "completed")
+      create(:race_participant, user: @user1, race: @race, lane: 1, position: 1)
+      create(:race_participant, user: @user2, race: @race, lane: 2, position: 2)
 
-      expect(response).to have_http_status(:no_content)
-      expect(User.count).to eq(0)
+      expect(User.count).to eq(2)
+
+      delete :destroy, params: { id: @user1.id }
+
+      expect(response).to have_http_status(:unprocessable_entity)
+
+      json = JSON.parse(response.body)
+
+      expect(json["errors"]).to include("User cannot be deleted because it is inside a race")
     end
   end
 end

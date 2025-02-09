@@ -57,6 +57,9 @@ en:
               duplicate_lane: "must have a unique lane"
               valid_rankings: "must have a valid ranking like 1, 2, 3, 4, 4, 5..."
               blank_rankings: "must have a position"
+  activerecord:
+    errors:
+      models:
         user:
           attributes:
             name:
@@ -64,4 +67,6 @@ en:
               too_short: "is too short (minimum is %{count} characters)"
               too_long: "is too long (maximum is %{count} characters)"
               uniqueness: "has already been taken"
+          restrict_dependent_destroy:
+            has_many: "cannot be deleted because it is associated with some races"
 

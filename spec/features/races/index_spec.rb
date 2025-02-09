@@ -29,13 +29,11 @@ RSpec.describe "Races index page", type: :system do
         RaceParticipant.delete_all
         User.delete_all
 
-        @race1 = FactoryBot.create(:race, title: "Test Race 1", start_date: Date.today)
-        # Create two users.
-        @user1 = FactoryBot.create(:user, name: "Alice")
-        @user2 = FactoryBot.create(:user, name: "Bob")
-        # Create race participants for the race.
-        FactoryBot.create(:race_participant, race: @race1, user: @user1, lane: 1)
-        FactoryBot.create(:race_participant, race: @race1, user: @user2, lane: 2)
+        @race1 = create(:race, title: "Test Race 1", start_date: Date.today)
+        @user1 = create(:user, name: "Alice")
+        @user2 = create(:user, name: "Bob")
+        create(:race_participant, race: @race1, user: @user1, lane: 1)
+        create(:race_participant, race: @race1, user: @user2, lane: 2)
       end
 
       it "displays the race details" do

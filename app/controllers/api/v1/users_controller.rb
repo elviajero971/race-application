@@ -31,7 +31,7 @@ module Api
 
       def destroy
         @user.destroy
-        render json: { message: "User deleted successfully" }, status: :no_content
+        render json: { message: "User deleted successfully" }, status: :ok
       end
 
       private

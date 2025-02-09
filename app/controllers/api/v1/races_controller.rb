@@ -38,7 +38,7 @@ module Api
       # DELETE /api/v1/races/:id
       def destroy
         @race.destroy
-        render json: { message: "Race deleted successfully" }, status: :no_content
+        render json: { message: "Race deleted successfully" }, status: :ok
       end
 
       private
