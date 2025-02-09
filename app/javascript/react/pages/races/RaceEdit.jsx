@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { updateRace } from '../api/races_api';
-import { useRaceEditData } from '../hooks/useRaceEditData';
-import { useUsers } from '../hooks/useUsers';
+import { updateRace } from '../../api/races_api';
+import { useRaceEditData } from '../../hooks/useRaceEditData';
+import { useUsers } from '../../hooks/useUsers';
 
 const RaceEdit = () => {
     const { id } = useParams();

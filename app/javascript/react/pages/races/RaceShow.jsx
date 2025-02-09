@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ParticipantItem from '../components/ParticipantItem';
-import { sortParticipantsByPosition } from '../utils/sortParticipants';
-import { useRaceData } from '../hooks/useRaceData';
-import { dateFormating } from '../utils/dataFormating';
+import ParticipantItem from '../../components/ParticipantItem';
+import { sortParticipantsByPosition } from '../../utils/sortParticipants';
+import { useRaceData } from '../../hooks/useRaceData';
+import { dateFormating } from '../../utils/dataFormating';
 
 const RaceShow = () => {
     const { id } = useParams();

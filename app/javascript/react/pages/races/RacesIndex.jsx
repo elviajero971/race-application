@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchRaces, deleteRace } from '../api/races_api';
+import { fetchRaces, deleteRace } from '../../api/races_api';
 import { FaUser } from 'react-icons/fa';
-import { dateFormating } from "../utils/dataFormating";
-import Message from '../components/Message';
+import { dateFormating } from "../../utils/dataFormating";
+import Message from '../../components/Message';
 
 const RacesIndex = () => {
     const [races, setRaces] = useState([]);

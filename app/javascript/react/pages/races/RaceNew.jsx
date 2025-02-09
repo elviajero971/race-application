@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchUsers } from '../api/users_api';
-import { createRace } from '../api/races_api';
+import { fetchUsers } from '../../api/users_api';
+import { createRace } from '../../api/races_api';
 
 const RaceNew = () => {
     const navigate = useNavigate();
