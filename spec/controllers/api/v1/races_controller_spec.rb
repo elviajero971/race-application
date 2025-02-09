@@ -5,8 +5,8 @@ RSpec.describe Api::V1::RacesController, type: :controller do
   describe "GET #index" do
     before do
       @race1 = create(:race, status: "completed")
-      @user1 = create(:user)
-      @user2 = create(:user)
+      @user1 = create(:user, name: "Alice")
+      @user2 = create(:user, name: "Bob")
       create(:race_participant, user: @user1, race: @race1, lane: 1, position: 1)
       create(:race_participant, user: @user2, race: @race1, lane: 2, position: 2)
     end
@@ -154,8 +154,8 @@ RSpec.describe Api::V1::RacesController, type: :controller do
 
   describe "PUT #update" do
     let(:race) { create(:race, status: "pending", title: "Sydney Race", start_date: 3.days.ago) }
-    let(:user1) { create(:user) }
-    let(:user2) { create(:user) }
+    let(:user1) { create(:user, name: 'Bob') }
+    let(:user2) { create(:user, name: 'Alice') }
 
     before do
       @race_participant_1 = create(:race_participant, race: race, user: user1, lane: 1)
@@ -222,7 +222,7 @@ RSpec.describe Api::V1::RacesController, type: :controller do
 
     it "returns no content" do
       delete :destroy, params: { id: race.id }
-      expect(response).to have_http_status(:ok)
+      expect(response).to have_http_status(:no_content)
       json = JSON.parse(response.body)
       expect(json["message"]).to eq "Race deleted successfully"
     end
