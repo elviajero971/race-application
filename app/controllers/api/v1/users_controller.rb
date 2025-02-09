@@ -30,8 +30,11 @@ module Api
       end
 
       def destroy
-        @user.destroy
-        render json: { message: "User deleted successfully" }, status: :ok
+        if @user.destroy
+          render json: { message: "User deleted successfully" }, status: :ok
+        else
+          render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+        end
       end
 
       private

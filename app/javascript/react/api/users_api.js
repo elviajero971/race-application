@@ -62,7 +62,8 @@ export const deleteUser = async (id) => {
             method: 'DELETE',
         });
         if (!response.ok) {
-            throw new Error('Error deleting user');
+            const errorData = await response.json();
+            throw new Error(errorData.errors ? errorData.errors.join(', ') : 'Error deleting user');
         }
         return await response.json();
     } catch (error) {

@@ -68,5 +68,5 @@ en:
               too_long: "is too long (maximum is %{count} characters)"
               uniqueness: "has already been taken"
           restrict_dependent_destroy:
-            has_many: "cannot be deleted because it is associated with some races"
+            has_many: "User cannot be deleted because it is associated with some races"
 
