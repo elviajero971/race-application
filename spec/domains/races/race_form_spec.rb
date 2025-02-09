@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe Races::RaceForm, type: :model do
   before do
-    @user1 = create(:user)
-    @user2 = create(:user)
-    @user3 = create(:user)
+    @user1 = create(:user, name: 'Alice')
+    @user2 = create(:user, name: 'Bob')
+    @user3 = create(:user, name: 'Charlie')
   end
 
   describe 'Validations on create' do
