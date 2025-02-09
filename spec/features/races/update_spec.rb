@@ -24,7 +24,7 @@ RSpec.describe "Race update page", type: :system do
 
       click_link "View Details"
 
-      click_button "Edit the race"
+      click_button "Update race"
 
       fill_in "Race Title", with: "Updated Race Title"
       new_date = (Date.new(2025,12,31)).strftime("%d/%m/%Y")
@@ -35,7 +35,7 @@ RSpec.describe "Race update page", type: :system do
       fill_in "participant-1-lane", with: "2"
       fill_in "participant-1-position", with: "1"
 
-      click_button "Update Race"
+      click_button "Update race"
 
       expect(page).to have_current_path("/races/#{@race.id}")
       expect(page).to have_text("Updated Race Title")
@@ -69,7 +69,7 @@ RSpec.describe "Race update page", type: :system do
 
       click_link "View Details"
 
-      click_button "Edit the race"
+      click_button "Update race"
 
       select "Alice", from: "participant-0-user"
       select "Alice", from: "participant-1-user"
@@ -79,7 +79,7 @@ RSpec.describe "Race update page", type: :system do
       fill_in "participant-1-lane", with: "2"
       fill_in "participant-1-position", with: "2"
 
-      click_button "Update Race"
+      click_button "Update race"
 
       expect(page).to have_text("Participants must each be a different user")
     end

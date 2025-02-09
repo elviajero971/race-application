@@ -166,7 +166,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       json = JSON.parse(response.body)
 
-      expect(json["errors"]).to include("User cannot be deleted because it is inside a race")
+      expect(json["errors"]).to include("User cannot be deleted because it is associated with some races")
     end
   end
 end

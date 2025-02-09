@@ -4,7 +4,7 @@ import { updateRace } from '../../api/races_api';
 import { useRaceEditData } from '../../hooks/useRaceEditData';
 import { useUsers } from '../../hooks/useUsers';
 
-const RaceEdit = () => {
+const RaceUpdate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -82,7 +82,7 @@ const RaceEdit = () => {
 
     return (
         <div className="w-full max-w-3xl mx-auto mt-8">
-            <h2 className="text-2xl font-bold mb-4">Edit Race #{id}</h2>
+            <h2 className="text-2xl font-bold mb-4">Update Race</h2>
             {formError && <div className="text-red-500 mb-4">{formError}</div>}
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
@@ -222,7 +222,7 @@ const RaceEdit = () => {
                     type="submit"
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                 >
-                    Update Race
+                    Update race
                 </button>
                 {formError && <div className="text-red-500 mt-4">{formError}</div>}
             </form>
@@ -236,4 +236,4 @@ const RaceEdit = () => {
     );
 };
 
-export default RaceEdit;
+export default RaceUpdate;

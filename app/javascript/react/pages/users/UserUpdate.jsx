@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchUser, updateUser } from '../../api/users_api';
 
-const UserEdit = () => {
+const UserUpdate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -28,9 +28,8 @@ const UserEdit = () => {
         e.preventDefault();
         try {
             // Call your API to update the user
-            await updateUser(id, { name, email });
-            // Navigate to the user's detail page after updating
-            navigate(`/users/${id}`);
+            await updateUser(id, { name });
+            navigate(`/users/`);
         } catch (err) {
             setError(err.message);
         }
@@ -55,26 +54,15 @@ const UserEdit = () => {
                         required
                     />
                 </div>
-                <div>
-                    <label className="block mb-1" htmlFor="email">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        className="border rounded p-2 w-full"
-                        required
-                    />
-                </div>
                 <button
                     type="submit"
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                 >
-                    Update User
+                    Update user
                 </button>
             </form>
         </div>
     );
 };
 
-export default UserEdit;
+export default UserUpdate;

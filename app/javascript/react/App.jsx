@@ -6,10 +6,10 @@ import Navbar from "./components/Navbar";
 import RacesIndex from './pages/races/RacesIndex';
 import RaceShow from './pages/races/RaceShow';
 import RaceNew from './pages/races/RaceNew';
-import RaceEdit from './pages/races/RaceEdit';
+import RaceUpdate from './pages/races/RaceUpdate';
 import UsersIndex from "./pages/users/UsersIndex";
 import UserNew from "./pages/users/UserNew";
-import UserEdit from "./pages/users/UserEdit";
+import UserUpdate from "./pages/users/UserUpdate";
 
 const App = () => {
     return (
@@ -20,11 +20,11 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<RacesIndex />} />
                     <Route path="/races/new" element={<RaceNew />} />
-                    <Route path="/races/:id/edit" element={<RaceEdit />} />
+                    <Route path="/races/:id/edit" element={<RaceUpdate />} />
                     <Route path="/races/:id" element={<RaceShow />} />
                     <Route path="/users" element={<UsersIndex />} />
                     <Route path="/users/new" element={<UserNew />} />
-                    <Route path="/users/:id/edit" element={<UserEdit />} />
+                    <Route path="/users/:id/edit" element={<UserUpdate />} />
                 </Routes>
             </div>
         </Router>

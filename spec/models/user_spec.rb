@@ -46,7 +46,7 @@ describe 'User' do
       expect(User.count).to eq(2)
 
       # check the error message
-      expect(@user1.errors[:base]).to include('cannot be deleted because it is associated with some races')
+      expect(@user1.errors[:base]).to include('User cannot be deleted because it is associated with some races')
     end
   end
 

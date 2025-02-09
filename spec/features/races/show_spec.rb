@@ -24,16 +24,12 @@ RSpec.describe "Race show page", type: :system do
     end
 
     it "navigates from index to show and displays all race details" do
-      # Visit the home (index) page.
       visit root_path
 
-      # Check that the index page shows the race title.
       expect(page).to have_text("Test Race Show")
 
-      # Click the "View Details" link for the race.
       click_link "View Details"
 
-      # On the race show page, verify that the race details are present.
       expect(page).to have_text("Race: Test Race Show")
       expect(page).to have_text("Status: completed")
 
@@ -46,7 +42,7 @@ RSpec.describe "Race show page", type: :system do
       expect(page).to have_text("Charlie")
 
       expect(page).to have_button("Back to all races")
-      expect(page).to have_button("Edit the race")
+      expect(page).to have_button("Update race")
     end
   end
 end

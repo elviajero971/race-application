@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchUsers, deleteUser } from '../../api/users_api';
 import Message from '../../components/Message';
 
 const UsersIndex = () => {
     const [users, setUsers] = useState([]);
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [notification, setNotification] = useState(null);
@@ -78,7 +79,13 @@ const UsersIndex = () => {
                                         <p className="text-lg font-semibold">{user.name}</p>
                                     </div>
                                 </div>
-                                <div className="flex items-center">
+                                <div className="flex items-center space-x-4">
+                                    <button
+                                        className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                                        onClick={() => navigate(`/users/${user.id}/edit`)}
+                                    >
+                                        Update user
+                                    </button>
                                     <button
                                         onClick={() => handleDelete(user.id)}
                                         className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
