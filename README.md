@@ -50,23 +50,24 @@ You can access the live demo of the app by visiting the following link:
     ```bash
     docker build -t race-app .
     ```
-   
-3. **Find the container name**:
-    ```bash
-    docker ps
-    ```
 
-4. **Set up the database and data**:
-    ```bash
-   docker exec -it container_name bundle exec rails db:migrate db:seed
-   docker exec -it container_name bundle exec rails db:migrate RAILS_ENV=test
-    ```
-
-### Running the app
-**Start the server using docker**:
+3. **Start the server using docker**:
    ```bash
-  docker run -it --rm -p 3005:3005 race-app
+    docker run -it --rm -p 3005:3005 race-app
    ```
+   
+4. **Find the container name**:
+    ```bash
+        docker ps
+    ```
+
+5. **Set up the database and data**:
+    ```bash
+       docker exec -it container_name bundle exec rails db:migrate db:seed
+       docker exec -it container_name bundle exec rails db:migrate RAILS_ENV=test
+    ```
+
+
 
 **Access the app**:
 - Open your browser and navigate to `http://localhost:3005/`
