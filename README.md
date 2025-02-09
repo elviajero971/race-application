@@ -7,6 +7,7 @@ A full-stack web application built with **Ruby on Rails** and **React** that emp
 ## 🚀 User Stories
 
 - **Race Setup:**
+   - As a teacher, I want to create, update, and delete any students in the school so that I can manage the list of participants.
    - As a teacher, I want to create a race with at least 2 students, ensuring that each student is assigned to a unique lane.
    - As a teacher, I want to prevent the same student from being assigned to more than one lane in the same race.
 
@@ -17,6 +18,7 @@ A full-stack web application built with **Ruby on Rails** and **React** that emp
 
 - **Viewing Results:**
    - As a teacher, I want to view the detailed results of each race so that I can quickly determine the winners and hand out medals.
+   - As a teacher, I want to view the list of students
 
 ---
 
@@ -36,12 +38,12 @@ You can access the live demo of the app by visiting the following link:
 
 
 
-### Installation
+## Installation using docker
 
 1. **Clone the repository**:
    ```bash
-   git clone git@github.com:elviajero971/dinnertime.git
-   cd dinnertime
+   git clone git@github.com:elviajero971/race-application.git
+   cd race-application
     ```
 
 2. **Build the docker image**:
@@ -61,7 +63,7 @@ You can access the live demo of the app by visiting the following link:
     ```
 
 ### Running the app
-**Start the server with foreman using the Procfile**:
+**Start the server using docker**:
    ```bash
   docker run -it --rm -p 3005:3005 race-app
    ```
@@ -73,4 +75,40 @@ You can access the live demo of the app by visiting the following link:
 **Run the test suite**:
    ```bash
     docker exec -e RAILS_ENV=test -it container_name bundle exec rspec
+   ```
+
+---
+
+## Installation locally
+
+1. **Clone the repository**:
+   ```bash
+   git clone git@github.com:elviajero971/race-application.git
+   cd race-application
+    ```
+
+2. **Install depencies**:
+    ```bash
+    bundle install
+   yarn install
+    ```
+
+3. **Set up the database and data**:
+    ```bash
+   rails db:create db:migrate db:seed
+    ```
+
+### Running the app
+**Start the server with foreman using the Procfile**:
+   ```bash
+    foreman start -f Procfile.dev
+   ```
+
+**Access the app**:
+- Open your browser and navigate to `http://localhost:5000/`
+
+### Running tests
+**Run the test suite**:
+   ```bash
+    rspec .
    ```
