@@ -59,7 +59,12 @@ const RacesIndex = () => {
                 />
             )}
             <div className="mt-8">
-                <h2 className="text-2xl font-bold mb-4">Races</h2>
+                <div className='flex justify-around items-center'>
+                    <h2 className="text-2xl font-bold mb-4">Races</h2>
+                    <Link to="/races/new" className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                        Create a new race
+                    </Link>
+                </div>
                 {races.length === 0 ? (
                     <div className="text-center text-gray-600">No races yet. Create the first one.</div>
                 ) : (
@@ -67,37 +72,39 @@ const RacesIndex = () => {
                         {races.map((race) => (
                             <li
                                 key={race.id}
-                                className="border rounded p-4 shadow hover:shadow-lg transition-shadow"
+                                className="flex items-center justify-between border rounded p-4 shadow hover:shadow-lg transition-shadow"
                             >
-                                <div className="flex justify-between items-center">
+                                {/* Left section: Race details and participant count */}
+                                <div className="flex items-center space-x-6">
                                     <div>
                                         <p className="text-lg font-semibold">{race.title}</p>
-                                        <p className="text-xs sm:text-sm md:text-base text-gray-600 whitespace-nowrap overflow-hidden truncate">
+                                        <p className="text-xs sm:text-sm md:text-base text-gray-600 truncate">
                                             Date: {dateFormating(race.start_date)}
                                         </p>
                                     </div>
-                                    <div className="flex items-center space-x-2">
-                                      <span className="flex text-blue-500 px-3 py-1">
-                                        {race.race_participants ? race.race_participants.length : 0}
-                                          <FaUser className="text-blue-500 mx-0.5" size={20} />
-                                      </span>
-                                      <button
-                                        onClick={() => handleDelete(race.id)}
-                                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                                      >
-                                        Delete Race
-                                      </button>
-                                    </div>
+                                    <span className="flex text-blue-500 px-3 py-1">
+      {race.race_participants ? race.race_participants.length : 0}
+                                        <FaUser className="text-blue-500 mx-0.5" size={20} />
+    </span>
                                 </div>
-                                <div>
+
+                                {/* Right section: Buttons */}
+                                <div className="flex items-center space-x-4">
                                     <Link
                                         to={`/races/${race.id}`}
-                                        className="inline-block px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                                        className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                                     >
                                         View Details
                                     </Link>
+                                    <button
+                                        onClick={() => handleDelete(race.id)}
+                                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                                    >
+                                        Delete Race
+                                    </button>
                                 </div>
                             </li>
+
                         ))}
                     </ul>
                 )}

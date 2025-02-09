@@ -4,7 +4,7 @@ RSpec.describe "Races index page", type: :system do
   describe "visiting the home page" do
     it "displays the welcome message" do
       visit root_path
-      expect(page).to have_text("Race Dashboard")
+      expect(page).to have_text("Race management dashboard")
     end
 
     context "when no races are present" do

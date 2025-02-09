@@ -85,7 +85,6 @@ const RaceEdit = () => {
             <h2 className="text-2xl font-bold mb-4">Edit Race #{id}</h2>
             {formError && <div className="text-red-500 mb-4">{formError}</div>}
             <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Race Details */}
                 <div>
                     <label htmlFor="status" className="block font-medium mb-1">
                         Race Status:
@@ -128,7 +127,6 @@ const RaceEdit = () => {
                     />
                 </div>
 
-                {/* Participants Section */}
                 <div>
                     <h3 className="font-medium mb-2">Participants</h3>
                     <div className="space-y-4">
@@ -137,7 +135,6 @@ const RaceEdit = () => {
                                 key={participant.id || index}
                                 className="grid grid-cols-3 gap-4 items-center border p-4 rounded shadow-sm bg-gray-50"
                             >
-                                {/* User select column */}
                                 <div>
                                     <label
                                         htmlFor={`participant-${index}-user`}
@@ -162,7 +159,6 @@ const RaceEdit = () => {
                                         ))}
                                     </select>
                                 </div>
-                                {/* Lane input column */}
                                 <div>
                                     <label
                                         htmlFor={`participant-${index}-lane`}
@@ -182,7 +178,6 @@ const RaceEdit = () => {
                                         min="1"
                                     />
                                 </div>
-                                {/* Position input column */}
                                 <div>
                                     <label
                                         htmlFor={`participant-${index}-position`}
@@ -202,7 +197,6 @@ const RaceEdit = () => {
                                         min="1"
                                     />
                                 </div>
-                                {/* Remove button row */}
                                 <div className="col-span-3 text-right">
                                     <button
                                         type="button"

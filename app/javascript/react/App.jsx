@@ -11,15 +11,7 @@ const App = () => {
     return (
         <Router>
             <div className="text-center min-h-screen flex flex-col items-center justify-start box-border bg-white mx-5 mb-5">
-                <h1 className="text-4xl font-bold text-gray-800 mt-5">Race Dashboard</h1>
-                <nav className="mt-4">
-                    <Link to="/" className="mx-2 text-blue-500 hover:underline">
-                        Races
-                    </Link>
-                    <Link to="/races/new" className="mx-2 text-blue-500 hover:underline">
-                        Create a new race
-                    </Link>
-                </nav>
+                <h1 className="text-4xl font-bold text-gray-800 mt-5">Race management dashboard</h1>
                 <Routes>
                     <Route path="/" element={<RacesIndex />} />
                     <Route path="/races/new" element={<RaceNew />} />
