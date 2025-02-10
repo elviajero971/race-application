@@ -29,7 +29,7 @@ const UsersIndex = () => {
                 if (result && result.message) {
                     showNotification(result.message, 'success');
                 } else {
-                    showNotification('User deleted successfully', 'success');
+                    showNotification('An error occurred', 'error');
                 }
                 setUsers(users.filter(user => user.id !== id));
             } catch (err) {

@@ -18,7 +18,7 @@ const UserNew = () => {
             navigate('/users');
         } catch (err) {
             setError(err.message);
-            showNotification('An error occurred, user could not be created', 'error');
+            showNotification("An error occurred, user couldn't be created", 'error');
         }
     };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchUsers } from '../../api/users_api';
 import { createRace } from '../../api/races_api';
+import { useNotification } from '../../context/NotificationContext';
 
 const RaceNew = () => {
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const RaceNew = () => {
     ]);
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
+    const { showNotification } = useNotification();
 
     useEffect(() => {
         fetchUsers()
@@ -48,9 +50,11 @@ const RaceNew = () => {
 
         try {
             await createRace(raceData);
+            showNotification("Race created successfully", "success");
             navigate('/');
         } catch (err) {
             setError(err.message);
+            showNotification("An error occurred, race couldn't be created", 'error');
         }
     };
 

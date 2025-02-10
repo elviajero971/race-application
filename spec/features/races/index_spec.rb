@@ -9,7 +9,6 @@ RSpec.describe "Races index page", type: :system do
 
     context "when no races are present" do
       before do
-        # Ensure there are no Race records in the test database.
         Race.delete_all
         visit root_path
       end

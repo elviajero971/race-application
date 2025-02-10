@@ -4,12 +4,10 @@ RSpec.describe "Races New page", type: :system do
 
   context "when creating a new race successfully" do
     before do
-      # Ensure a clean state.
       Race.delete_all
       RaceParticipant.delete_all
       User.delete_all
 
-      # Create sample users for the dropdown.
       @user1 = create(:user, name: "Alice")
       @user2 = create(:user, name: "Bob")
     end
@@ -18,26 +16,21 @@ RSpec.describe "Races New page", type: :system do
       visit root_path
       click_link "Create a new race"
 
-      # Fill in Race Date and Title.
       fill_in "Race Date", with: Date.today.to_s
       fill_in "Race Title", with: "Test Race New"
 
-      # Fill in participant 0.
-      # Our RaceNew component uses IDs such as "participant-0-user" and "participant-0-lane"
       select "Alice", from: "participant-0-user"
       fill_in "participant-0-lane", with: "1"
 
-      # Fill in participant 1.
       select "Bob", from: "participant-1-user"
       fill_in "participant-1-lane", with: "2"
 
-      # Submit the form.
       click_button "Create Race"
 
-      # Verify that after creation, we are redirected to the index page.
       expect(page).to have_current_path(root_path)
-      # Check that the new race title appears on the index page.
       expect(page).to have_text("Test Race New")
+
+      expect(page).to have_css('.MuiAlert-root', text: "Race created successfully", wait: 10, visible: false)
     end
   end
 
@@ -58,18 +51,16 @@ RSpec.describe "Races New page", type: :system do
       fill_in "Race Date", with: Date.today.to_s
       fill_in "Race Title", with: "Te"
 
-      # Fill in first participant correctly.
       select "Alice", from: "participant-0-user"
       fill_in "participant-0-lane", with: "1"
 
-      # Second participant: select a user but leave lane empty.
       select "Bob", from: "participant-1-user"
-      # Leave "participant-1-lane" blank.
       fill_in "participant-1-lane", with: "2"
 
       click_button "Create Race"
 
       expect(page).to have_text("Title is too short (minimum is 3 characters)")
+      expect(page).to have_css('.MuiAlert-root', text: "An error occurred, race couldn't be created", wait: 10, visible: false)
     end
   end
 end

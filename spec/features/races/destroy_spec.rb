@@ -1,4 +1,3 @@
-# spec/system/races_destroy_spec.rb
 require 'rails_helper'
 
 RSpec.describe "Race destroy", type: :system do
@@ -7,7 +6,6 @@ RSpec.describe "Race destroy", type: :system do
     RaceParticipant.delete_all
     User.delete_all
 
-    # Create sample user(s) and a race.
     @user = create(:user, name: "Alice")
     @race = create(:race, title: "Race to Delete", start_date: Date.today)
     create(:race_participant, race: @race, user: @user, lane: 1)
@@ -20,6 +18,7 @@ RSpec.describe "Race destroy", type: :system do
       find('button[aria-label="Delete race"]').click
     end
 
+    expect(page).to have_css('.MuiAlert-root', text: "Race deleted successfully", wait: 10, visible: false)
     expect(page).to have_text("No races yet")
 
     expect(Race.all).to be_empty

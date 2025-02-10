@@ -53,6 +53,8 @@ RSpec.describe "Race update page", type: :system do
       expect(page).to have_text("Bob")
 
       expect(page).to have_text("Charlie")
+
+      expect(page).to have_css('.MuiAlert-root', text: "Race updated successfully", wait: 10, visible: false)
     end
   end
 
@@ -86,6 +88,8 @@ RSpec.describe "Race update page", type: :system do
       fill_in "participant-1-position", with: "2"
 
       click_button "Update race"
+
+      expect(page).to have_css('.MuiAlert-root', text: "An error occurred, race couldn't be updated", wait: 10, visible: false)
 
       expect(page).to have_text("Participants must each be a different user")
     end

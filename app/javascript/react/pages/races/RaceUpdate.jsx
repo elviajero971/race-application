@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { updateRace } from '../../api/races_api';
 import { useRaceEditData } from '../../hooks/useRaceEditData';
 import { useUsers } from '../../hooks/useUsers';
+import { useNotification } from "../../context/NotificationContext";
 
 const RaceUpdate = () => {
     const { id } = useParams();
@@ -25,6 +26,8 @@ const RaceUpdate = () => {
     const { users, loading: usersLoading, error: usersError } = useUsers();
 
     const [formError, setFormError] = useState('');
+
+    const { showNotification } = useNotification();
 
     const handleParticipantChange = (index, field, value) => {
         const newParticipants = [...participants];
@@ -56,10 +59,11 @@ const RaceUpdate = () => {
 
         try {
             await updateRace(id, raceData);
+            showNotification("Race updated successfully", "success");
             navigate(`/races/${id}`);
         } catch (err) {
-            console.log(err);
             setFormError(err.message);
+            showNotification("An error occurred, race couldn't be updated", 'error');
         }
     };
 
@@ -219,7 +223,6 @@ const RaceUpdate = () => {
                 >
                     Update race
                 </button>
-                {formError && <div className="text-red-500 mt-4">{formError}</div>}
             </form>
             <button
                 className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"

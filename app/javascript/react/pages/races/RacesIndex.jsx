@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { fetchRaces, deleteRace } from '../../api/races_api';
 import { UserIcon, ViewDetailsIcon, DeleteIcon} from "../../components/Icons";
 import { dateFormating } from "../../utils/dataFormating";
+import { useNotification } from "../../context/NotificationContext";
 
 const RacesIndex = () => {
     const [races, setRaces] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { showNotification } = useNotification();
 
     useEffect(() => {
         fetchRaces()
@@ -26,13 +28,13 @@ const RacesIndex = () => {
             try {
                 const result = await deleteRace(id);
                 if (result && result.message) {
-                    // send notification success
+                    showNotification(result.message, 'success');
                 } else {
-                    // send notification failure
+                    showNotification('An error occurred', 'error');
                 }
                 setRaces(races.filter(race => race.id !== id));
             } catch (err) {
-                // send notification failure
+                showNotification(err.message, 'error');
             }
         }
     };
