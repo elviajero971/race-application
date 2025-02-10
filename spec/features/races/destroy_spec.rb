@@ -8,9 +8,9 @@ RSpec.describe "Race destroy", type: :system do
     User.delete_all
 
     # Create sample user(s) and a race.
-    @user = FactoryBot.create(:user, name: "Alice")
-    @race = FactoryBot.create(:race, title: "Race to Delete", start_date: Date.today)
-    FactoryBot.create(:race_participant, race: @race, user: @user, lane: 1)
+    @user = create(:user, name: "Alice")
+    @race = create(:race, title: "Race to Delete", start_date: Date.today)
+    create(:race_participant, race: @race, user: @user, lane: 1)
   end
 
   it "destroys the race and displays a no races message on the index page" do

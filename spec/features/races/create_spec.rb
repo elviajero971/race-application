@@ -10,8 +10,8 @@ RSpec.describe "Races New page", type: :system do
       User.delete_all
 
       # Create sample users for the dropdown.
-      @user1 = FactoryBot.create(:user, name: "Alice")
-      @user2 = FactoryBot.create(:user, name: "Bob")
+      @user1 = create(:user, name: "Alice")
+      @user2 = create(:user, name: "Bob")
     end
 
     it "creates the race and displays it on the index page" do
@@ -47,8 +47,8 @@ RSpec.describe "Races New page", type: :system do
       RaceParticipant.delete_all
       User.delete_all
 
-      @user1 = FactoryBot.create(:user, name: "Alice")
-      @user2 = FactoryBot.create(:user, name: "Bob")
+      @user1 = create(:user, name: "Alice")
+      @user2 = create(:user, name: "Bob")
     end
 
     it "displays an error message about race title too short" do

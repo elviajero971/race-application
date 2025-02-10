@@ -8,7 +8,6 @@ const RaceUpdate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // Load race-specific data (details and participants)
     const {
         race,
         status,
@@ -23,12 +22,10 @@ const RaceUpdate = () => {
         error,
     } = useRaceEditData(id);
 
-    // Load available users
     const { users, loading: usersLoading, error: usersError } = useUsers();
 
     const [formError, setFormError] = useState('');
 
-    // Handle updates to a participant field
     const handleParticipantChange = (index, field, value) => {
         const newParticipants = [...participants];
         if (field === 'remove') {
@@ -39,12 +36,10 @@ const RaceUpdate = () => {
         setParticipants(newParticipants);
     };
 
-    // Add a new participant row with default empty values
     const addParticipantRow = () => {
         setParticipants([...participants, { user_id: '', lane: '', position: '' }]);
     };
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         const raceData = {
@@ -52,7 +47,7 @@ const RaceUpdate = () => {
             title,
             start_date: startDate,
             race_participants_attributes: participants.map((p) => ({
-                id: p.id, // if present (for existing participants)
+                id: p.id,
                 user_id: p.user_id,
                 lane: p.lane,
                 position: p.position,

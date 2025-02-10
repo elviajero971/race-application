@@ -49,7 +49,6 @@ module Api
         render json: { error: "Race not found" }, status: :not_found
       end
 
-      # Strong parameters allowing nested race participants.
       def race_params
         params.require(:race).permit(
           :status,

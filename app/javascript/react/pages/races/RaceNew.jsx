@@ -15,7 +15,6 @@ const RaceNew = () => {
     const [users, setUsers] = useState([]);
     const [error, setError] = useState('');
 
-    // Load available users for the select list.
     useEffect(() => {
         fetchUsers()
             .then((data) => setUsers(data))
@@ -86,7 +85,6 @@ const RaceNew = () => {
                         required
                     />
                 </div>
-                {/* Race status is hidden (always pending) */}
                 <input type="hidden" name="status" value="pending" />
 
                 <div>
@@ -96,7 +94,6 @@ const RaceNew = () => {
                             key={index}
                             className="grid grid-cols-3 gap-4 items-center mb-2"
                         >
-                            {/* User select */}
                             <div>
                                 <label
                                     className="block text-sm font-medium"
@@ -121,7 +118,6 @@ const RaceNew = () => {
                                     ))}
                                 </select>
                             </div>
-                            {/* Lane input */}
                             <div>
                                 <label
                                     className="block text-sm font-medium"
@@ -141,7 +137,6 @@ const RaceNew = () => {
                                     min="1"
                                 />
                             </div>
-                            {/* Remove button */}
                             <div className="flex justify-end">
                                 <button
                                     type="button"

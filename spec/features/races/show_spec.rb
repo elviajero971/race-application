@@ -10,17 +10,17 @@ RSpec.describe "Race show page", type: :system do
       User.delete_all
 
       # Create a sample race with status "completed" and today's date.
-      @race = FactoryBot.create(:race, title: "Test Race Show", status: "completed", start_date: Date.today)
+      @race = create(:race, title: "Test Race Show", status: "completed", start_date: Date.today)
 
       # Create sample users.
-      @user1 = FactoryBot.create(:user, name: "Alice")
-      @user2 = FactoryBot.create(:user, name: "Bob")
-      @user3 = FactoryBot.create(:user, name: "Charlie")
+      @user1 = create(:user, name: "Alice")
+      @user2 = create(:user, name: "Bob")
+      @user3 = create(:user, name: "Charlie")
 
       # Create race participants for the race.
-      FactoryBot.create(:race_participant, race: @race, user: @user1, lane: 1, position: 1)
-      FactoryBot.create(:race_participant, race: @race, user: @user2, lane: 2, position: 2)
-      FactoryBot.create(:race_participant, race: @race, user: @user3, lane: 3, position: 3)
+      create(:race_participant, race: @race, user: @user1, lane: 1, position: 1)
+      create(:race_participant, race: @race, user: @user2, lane: 2, position: 2)
+      create(:race_participant, race: @race, user: @user3, lane: 3, position: 3)
     end
 
     it "navigates from index to show and displays all race details" do
