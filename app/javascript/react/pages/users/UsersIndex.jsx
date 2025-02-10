@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchUsers, deleteUser } from '../../api/users_api';
-import Message from '../../components/Message';
 import { DeleteIcon, UpdateIcon } from "../../components/Icons";
+import { useNotification } from '../../context/NotificationContext';
 
 const UsersIndex = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [notification, setNotification] = useState(null);
+    const { showNotification } = useNotification();
 
     useEffect(() => {
         fetchUsers()
@@ -28,13 +27,13 @@ const UsersIndex = () => {
             try {
                 const result = await deleteUser(id);
                 if (result && result.message) {
-                    setNotification(result.message);
+                    showNotification(result.message, 'success');
                 } else {
-                    setNotification("User deleted successfully");
+                    showNotification('User deleted successfully', 'success');
                 }
                 setUsers(users.filter(user => user.id !== id));
             } catch (err) {
-                setNotification(err.message);
+                showNotification(err.message, 'error');
             }
         }
     };
@@ -43,19 +42,8 @@ const UsersIndex = () => {
         return <div className="text-center mt-4">Loading users...</div>;
     }
 
-    if (error) {
-        return <div className="text-center mt-4 text-red-500">Error: {error}</div>;
-    }
-
     return (
         <div className='relative w-full max-w-3xl mx-auto'>
-            {notification && (
-                <Message
-                    message={notification}
-                    type="success"
-                    onClose={() => setNotification(null)}
-                />
-            )}
             <div className="mt-8">
                 <div className='flex justify-between items-center'>
                     <h2 className="text-2xl font-bold mb-4">Users</h2>

@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom';
 import { fetchRaces, deleteRace } from '../../api/races_api';
 import { UserIcon, ViewDetailsIcon, DeleteIcon} from "../../components/Icons";
 import { dateFormating } from "../../utils/dataFormating";
-import Message from '../../components/Message';
 
 const RacesIndex = () => {
     const [races, setRaces] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [notification, setNotification] = useState(null);
 
     useEffect(() => {
         fetchRaces()
@@ -28,13 +26,13 @@ const RacesIndex = () => {
             try {
                 const result = await deleteRace(id);
                 if (result && result.message) {
-                    setNotification(result.message);
+                    // send notification success
                 } else {
-                    setNotification("Race deleted successfully");
+                    // send notification failure
                 }
                 setRaces(races.filter(race => race.id !== id));
             } catch (err) {
-                setNotification(err.message);
+                // send notification failure
             }
         }
     };
@@ -49,13 +47,6 @@ const RacesIndex = () => {
 
     return (
         <div className='relative w-full max-w-3xl mx-auto'>
-            {notification && (
-                <Message
-                    message={notification}
-                    type="success"
-                    onClose={() => setNotification(null)}
-                />
-            )}
             <div className="mt-8">
                 <div className='flex justify-around items-center'>
                     <h2 className="text-2xl font-bold mb-4">Races</h2>

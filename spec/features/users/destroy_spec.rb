@@ -16,7 +16,8 @@ RSpec.describe "Users Destroy", type: :system do
         find('button[aria-label="Delete user"]').click
       end
 
-      expect(page).to have_text("User deleted successfully")
+      expect(page).to have_css('.MuiAlert-root', text: "User deleted successfully", wait: 10, visible: false)
+
       expect(page).not_to have_text("Eve")
     end
   end

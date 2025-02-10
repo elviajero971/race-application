@@ -39,8 +39,6 @@ describe 'User' do
 
       result = @user1.destroy
 
-      puts result
-
       expect(result).to eq(false)
 
       expect(User.count).to eq(2)

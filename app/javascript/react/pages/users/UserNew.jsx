@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUser } from '../../api/users_api';
+import { useNotification } from '../../context/NotificationContext';
 
 const UserNew = () => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [error, setError] = useState(null);
+    const { showNotification } = useNotification();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("handleSubmit triggered"); // Check that the form submission works
         try {
             await createUser({ name });
+            showNotification('User created successfully', 'success');
             navigate('/users');
         } catch (err) {
             setError(err.message);
+            showNotification('An error occurred, user could not be created', 'error');
         }
     };
 
