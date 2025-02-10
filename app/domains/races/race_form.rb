@@ -14,7 +14,6 @@ module Races
     validates :title, presence: true, length: { minimum: 3, maximum: 255 }
     validates :start_date, presence: true
 
-    # Run common validations in create and update
     validate :validate_create_conditions, on: :create
     validate :validate_update_conditions, on: :update
 
@@ -49,18 +48,12 @@ module Races
       }
     end
 
-    # -------------------------
-    # Create validations
-    # -------------------------
     def validate_create_conditions
       validates_number_of_participants
       validates_users_uniqueness
       validates_lanes_uniqueness
     end
 
-    # -------------------------
-    # Update validations
-    # -------------------------
     def validate_update_conditions
       validate_create_conditions
 
@@ -90,7 +83,6 @@ module Races
         )
       end
 
-      # Check that each user_id corresponds to a valid User.
       invalid_ids = user_ids.reject(&:blank?).reject { |uid| User.exists?(id: uid) }
       if invalid_ids.any?
         errors.add(
@@ -99,7 +91,6 @@ module Races
         )
       end
 
-      # Check for duplicate user_ids.
       duplicates = user_ids.group_by { |uid| uid }.select { |_, v| v.size > 1 }.keys
       if duplicates.any?
         errors.add(

@@ -137,6 +137,20 @@ RSpec.describe Races::RaceForm, type: :model do
         expect(form.update).to eq(true)
       end
 
+      it 'updates the race successfully even with lane an position as string' do
+        attributes = {
+          status: 'completed',
+          title: 'Updated Title',
+          start_date: Date.today,
+          race_participants_attributes: [
+            { user_id: @user1.id, lane: 1, position: "1" },
+            { user_id: @user2.id, lane: "2", position: 2 }
+          ]
+        }
+        form = described_class.new(attributes.merge(race: race))
+        expect(form.update).to eq(true)
+      end
+
       it 'is valid when multiple participants have the same position if within contiguous range' do
         attributes = {
           status: 'completed',

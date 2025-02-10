@@ -4,19 +4,17 @@ RSpec.describe "Race update page", type: :system do
 
   context "when updating a race successfully" do
     before do
-      # Clear existing data
       Race.delete_all
       RaceParticipant.delete_all
       User.delete_all
 
-      # Create sample users.
-      @user1 = FactoryBot.create(:user, name: "Alice")
-      @user2 = FactoryBot.create(:user, name: "Bob")
+      @user1 = create(:user, name: "Alice")
+      @user2 = create(:user, name: "Bob")
+      @user3 = create(:user, name: "Charlie")
 
-      # Create a race with two participants.
-      @race = FactoryBot.create(:race, title: "Original Race", status: "pending", start_date: Date.today)
-      FactoryBot.create(:race_participant, race: @race, user: @user1, lane: 1, position: 1)
-      FactoryBot.create(:race_participant, race: @race, user: @user2, lane: 2, position: 2)
+      @race = create(:race, title: "Original Race", status: "pending", start_date: Date.today)
+      create(:race_participant, race: @race, user: @user1, lane: 1, position: 1)
+      create(:race_participant, race: @race, user: @user2, lane: 2, position: 1)
     end
 
     it "updates the race details and participant info" do
@@ -30,10 +28,16 @@ RSpec.describe "Race update page", type: :system do
       new_date = (Date.new(2025,12,31)).strftime("%d/%m/%Y")
       fill_in "Start Date", with: new_date
 
-      fill_in "participant-0-lane", with: "1"
+      fill_in "participant-0-lane", with: 1
       fill_in "participant-0-position", with: "2"
       fill_in "participant-1-lane", with: "2"
-      fill_in "participant-1-position", with: "1"
+      fill_in "participant-1-position", with: 1
+
+      click_button "Add Participant"
+
+      select "Charlie", from: "participant-2-user"
+      fill_in "participant-2-lane", with: "3"
+      fill_in "participant-2-position", with: 2
 
       click_button "Update race"
 
@@ -47,6 +51,8 @@ RSpec.describe "Race update page", type: :system do
       expect(page).to have_text("Alice")
 
       expect(page).to have_text("Bob")
+
+      expect(page).to have_text("Charlie")
     end
   end
 
@@ -56,12 +62,12 @@ RSpec.describe "Race update page", type: :system do
       RaceParticipant.delete_all
       User.delete_all
 
-      @user1 = FactoryBot.create(:user, name: "Alice")
-      @user2 = FactoryBot.create(:user, name: "Bob")
+      @user1 = create(:user, name: "Alice")
+      @user2 = create(:user, name: "Bob")
 
-      @race = FactoryBot.create(:race, title: "Original Race", status: "pending", start_date: Date.today)
-      FactoryBot.create(:race_participant, race: @race, user: @user1, lane: 1, position: 1)
-      FactoryBot.create(:race_participant, race: @race, user: @user2, lane: 2, position: 2)
+      @race = create(:race, title: "Original Race", status: "pending", start_date: Date.today)
+      create(:race_participant, race: @race, user: @user1, lane: 1, position: 1)
+      create(:race_participant, race: @race, user: @user2, lane: 2, position: 2)
     end
 
     it "displays an error when the same user is selected for two participants" do

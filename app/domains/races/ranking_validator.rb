@@ -23,9 +23,7 @@ module Races
     end
 
     def validates_standard_competition_ranking?(positions)
-      # order by lowest to highest
-      positions = positions.sort
-      positions = positions.map { |p| p.to_i }
+      positions = positions.map(&:to_i).sort
       expected = 1
       current_group_value = nil
       group_count = 0
