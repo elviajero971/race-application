@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchRaces, deleteRace } from '../../api/races_api';
-import { FaUser } from 'react-icons/fa';
+import { UserIcon, ViewDetailsIcon, DeleteIcon} from "../../components/Icons";
 import { dateFormating } from "../../utils/dataFormating";
 import Message from '../../components/Message';
 
@@ -27,13 +27,11 @@ const RacesIndex = () => {
         if (window.confirm("Are you sure you want to delete this race?")) {
             try {
                 const result = await deleteRace(id);
-                // If deleteRace returns a JSON message, set the notification.
                 if (result && result.message) {
                     setNotification(result.message);
                 } else {
                     setNotification("Race deleted successfully");
                 }
-                // Update the state by removing the deleted race.
                 setRaces(races.filter(race => race.id !== id));
             } catch (err) {
                 setNotification(err.message);
@@ -74,7 +72,6 @@ const RacesIndex = () => {
                                 key={race.id}
                                 className="flex items-center justify-between border rounded p-4 shadow hover:shadow-lg transition-shadow"
                             >
-                                {/* Left section: Race details and participant count */}
                                 <div className="flex items-center space-x-6">
                                     <div>
                                         <p className="text-lg font-semibold">{race.title}</p>
@@ -84,23 +81,24 @@ const RacesIndex = () => {
                                     </div>
                                     <span className="flex text-blue-500 px-3 py-1">
       {race.race_participants ? race.race_participants.length : 0}
-                                        <FaUser className="text-blue-500 mx-0.5" size={20} />
+                                        <UserIcon />
     </span>
                                 </div>
 
-                                {/* Right section: Buttons */}
                                 <div className="flex items-center space-x-4">
                                     <Link
                                         to={`/races/${race.id}`}
-                                        className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                                        className="px-3 py-1"
+                                        aria-label="View details"
                                     >
-                                        View Details
+                                        <ViewDetailsIcon />
                                     </Link>
                                     <button
                                         onClick={() => handleDelete(race.id)}
-                                        className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                                        className="px-3 py-1"
+                                        aria-label="Delete race"
                                     >
-                                        Delete Race
+                                        <DeleteIcon />
                                     </button>
                                 </div>
                             </li>

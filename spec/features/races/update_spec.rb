@@ -20,7 +20,7 @@ RSpec.describe "Race update page", type: :system do
     it "updates the race details and participant info" do
       visit root_path
 
-      click_link "View Details"
+      find("a[aria-label='View details'][href='/races/#{@race.id}']").click
 
       click_button "Update race"
 
@@ -73,7 +73,7 @@ RSpec.describe "Race update page", type: :system do
     it "displays an error when the same user is selected for two participants" do
       visit root_path
 
-      click_link "View Details"
+      find("a[aria-label='View details'][href='/races/#{@race.id}']").click
 
       click_button "Update race"
 

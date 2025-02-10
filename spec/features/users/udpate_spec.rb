@@ -7,7 +7,7 @@ RSpec.describe "Users Update", type: :system do
       @user = create(:user, name: "Dave")
       visit root_path
       click_on "List of users"
-      click_on "Update user"
+      find('button[aria-label="Update user"]').click
     end
 
     it "displays the edit form with prefilled data" do
@@ -20,6 +20,13 @@ RSpec.describe "Users Update", type: :system do
       click_button "Update user"
 
       expect(page).to have_text("David")
+    end
+
+    it "displays an error message when the user name is too short" do
+      fill_in "Name", with: "Da"
+      click_button "Update user"
+
+      expect(page).to have_text("Name is too short (minimum is 3 characters)")
     end
   end
 end

@@ -47,7 +47,7 @@ RSpec.describe "Races index page", type: :system do
 
         expect(page).to have_text("2")
 
-        expect(page).to have_link("View Details", href: "/races/#{@race1.id}")
+        expect(page).to have_css("a[aria-label='View details'][href='/races/#{@race1.id}']")
       end
     end
   end

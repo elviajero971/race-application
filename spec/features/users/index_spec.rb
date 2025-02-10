@@ -44,18 +44,6 @@ RSpec.describe "Users index page", type: :system do
         expect(page).to have_text("Alice")
         expect(page).to have_text("Bob")
       end
-
-      it "displays a 'Delete User' button for each user" do
-        expect(page).to have_button("Delete User")
-      end
-
-      it "allows deleting a user and updates the list" do
-        accept_confirm do
-          click_button("Delete User", match: :first)
-        end
-
-        expect(page).not_to have_text("Alice")
-      end
     end
   end
 end

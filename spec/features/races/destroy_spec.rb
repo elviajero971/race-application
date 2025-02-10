@@ -16,11 +16,9 @@ RSpec.describe "Race destroy", type: :system do
   it "destroys the race and displays a no races message on the index page" do
     visit root_path
 
-    expect(page).to have_text("Race to Delete")
-
-    click_button "Delete Race"
-
-    page.driver.browser.switch_to.alert.accept
+    accept_confirm do
+      find('button[aria-label="Delete race"]').click
+    end
 
     expect(page).to have_text("No races yet")
 

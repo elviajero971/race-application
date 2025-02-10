@@ -13,7 +13,7 @@ RSpec.describe "Users Destroy", type: :system do
       expect(page).to have_text("Eve")
 
       accept_confirm do
-        click_button "Delete User", match: :first
+        find('button[aria-label="Delete user"]').click
       end
 
       expect(page).to have_text("User deleted successfully")

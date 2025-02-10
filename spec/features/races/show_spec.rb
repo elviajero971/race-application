@@ -28,7 +28,7 @@ RSpec.describe "Race show page", type: :system do
 
       expect(page).to have_text("Test Race Show")
 
-      click_link "View Details"
+      find('a[aria-label="View details"]').click
 
       expect(page).to have_text("Race: Test Race Show")
       expect(page).to have_text("Status: completed")

@@ -1,5 +1,6 @@
+// src/components/ParticipantItem.jsx
 import React from 'react';
-import { FaRoad, FaMedal } from 'react-icons/fa';
+import { LaneIcon, MedalIcon } from './Icons';  // Adjust path as necessary
 
 const ParticipantItem = ({ participant }) => (
     <li className="flex border p-3 rounded shadow-sm bg-gray-50">
@@ -7,11 +8,11 @@ const ParticipantItem = ({ participant }) => (
             <p className="font-medium">{participant.user.name}</p>
         </div>
         <div className="flex-1 flex items-center justify-center">
-            <FaRoad className="mr-1 text-green-500" />
+            <LaneIcon />
             <span>{participant.lane}</span>
         </div>
         <div className="flex-1 flex items-center justify-center">
-            <FaMedal className="mr-1 text-yellow-500" />
+            <MedalIcon />
             <span>{participant.position ? participant.position : 'N/A'}</span>
         </div>
     </li>
