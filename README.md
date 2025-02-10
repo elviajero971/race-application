@@ -29,7 +29,7 @@ You can access the live demo of the app by visiting the following link:
 
 ### App Tech versions
 - Ruby 3.2.0
-- Rails 7.2.2
+- Rails 8.0.1
 - Node.js 22.11.0
 - Yarn 1.22.22
 - SQLite 3.43.2
