@@ -16,16 +16,16 @@ RSpec.describe "Races New page", type: :system do
       visit root_path
       click_link "Create a new race"
 
-      fill_in "Race Date", with: Date.today.to_s
+      fill_in "start_date", with: Date.today.to_s
       fill_in "Race Title", with: "Test Race New"
 
-      select "Alice", from: "participant-0-user"
-      fill_in "participant-0-lane", with: "1"
+      select "Alice", from: "race_participants_attributes.0.user_id"
+      fill_in "race_participants_attributes.0.lane", with: "1"
 
-      select "Bob", from: "participant-1-user"
-      fill_in "participant-1-lane", with: "2"
+      select "Bob", from: "race_participants_attributes.1.user_id"
+      fill_in "race_participants_attributes.1.lane", with: "2"
 
-      click_button "Create Race"
+      click_button "Submit race"
 
       expect(page).to have_current_path(root_path)
       expect(page).to have_text("Test Race New")
@@ -34,7 +34,7 @@ RSpec.describe "Races New page", type: :system do
     end
   end
 
-  context "when there is a mistake on the form (missing lane)" do
+  context "when there is a mistake on the form (title is too short)" do
     before do
       Race.delete_all
       RaceParticipant.delete_all
@@ -48,19 +48,22 @@ RSpec.describe "Races New page", type: :system do
       visit root_path
       click_link "Create a new race"
 
-      fill_in "Race Date", with: Date.today.to_s
+      fill_in "Start Date", with: Date.today.to_s
       fill_in "Race Title", with: "Te"
 
-      select "Alice", from: "participant-0-user"
-      fill_in "participant-0-lane", with: "1"
+      select "Alice", from: "race_participants_attributes.0.user_id"
+      fill_in "race_participants_attributes.0.lane", with: "1"
 
-      select "Bob", from: "participant-1-user"
-      fill_in "participant-1-lane", with: "2"
+      select "Bob", from: "race_participants_attributes.1.user_id"
+      fill_in "race_participants_attributes.1.lane", with: "2"
 
-      click_button "Create Race"
+      click_button "Submit race"
 
-      expect(page).to have_text("Title is too short (minimum is 3 characters)")
-      expect(page).to have_css('.MuiAlert-root', text: "An error occurred, race couldn't be created", wait: 10, visible: false)
+      expect(page).to have_text("Title must be at least 3 characters")
+
+      expect(page).to have_current_path('/races/new')
+
+      expect(Race.all).to be_empty
     end
   end
 end

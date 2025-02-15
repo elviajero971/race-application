@@ -1,5 +1,3 @@
-// src/api/races_api.js
-
 export const fetchRaces = async () => {
     try {
         const response = await fetch('/api/v1/races');
@@ -37,6 +35,7 @@ export const createRace = async (raceData) => {
         });
         if (!response.ok) {
             const errorData = await response.json();
+            console.log("races_api.js -> createRace -> errorData", errorData);
             throw new Error(errorData.errors ? errorData.errors.join(', ') : 'Error creating race');
         }
         return await response.json();
@@ -44,8 +43,6 @@ export const createRace = async (raceData) => {
         throw error;
     }
 };
-
-// src/api/races_api.js
 
 export const updateRace = async (id, raceData) => {
     try {
@@ -56,7 +53,7 @@ export const updateRace = async (id, raceData) => {
         });
         if (!response.ok) {
             const errorData = await response.json();
-            console.log('errorData:', errorData);
+            console.log("races_api.js -> updateRace -> errorData", errorData);
             throw new Error(errorData.errors ? errorData.errors.join(', ') : 'Error updating race');
         }
         return await response.json();

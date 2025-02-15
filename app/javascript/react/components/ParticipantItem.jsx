@@ -1,6 +1,6 @@
 // src/components/ParticipantItem.jsx
 import React from 'react';
-import { LaneIcon, MedalIcon } from './Icons';  // Adjust path as necessary
+import { LaneIcon, MedalIcon } from './Icons';
 
 const ParticipantItem = ({ participant }) => (
     <li className="flex border p-3 rounded shadow-sm bg-gray-50">
