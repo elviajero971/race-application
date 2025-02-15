@@ -9,7 +9,7 @@ services:
     ports:
       - "3005:3005"
     volumes:
-      - race-db:/storage
+      - race-db:/app/storage
     command: bundle exec rails s -b '0.0.0.0' -p 3005
   nginx:
     image: nginx:latest
