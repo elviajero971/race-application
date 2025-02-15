@@ -42,7 +42,7 @@ export const createUser = async (userData) => {
 export const updateUser = async (id, userData) => {
     try {
         const response = await fetch(`/api/v1/users/${id}`, {
-            method: 'PUT', // or PATCH if you prefer
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user: userData }),
         });
