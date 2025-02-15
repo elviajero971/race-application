@@ -77,39 +77,3 @@ You can access the live demo of the app by visiting the following link:
    ```bash
     docker exec -e RAILS_ENV=test -it container_name bundle exec rspec
    ```
-
----
-
-## Installation locally
-
-1. **Clone the repository**:
-   ```bash
-   git clone git@github.com:elviajero971/race-application.git
-   cd race-application
-    ```
-
-2. **Install depencies**:
-    ```bash
-    bundle install
-   yarn install
-    ```
-
-3. **Set up the database and data**:
-    ```bash
-   rails db:create db:migrate db:seed
-    ```
-
-### Running the app
-**Start the server with foreman using the Procfile**:
-   ```bash
-    foreman start -f Procfile.dev
-   ```
-
-**Access the app**:
-- Open your browser and navigate to `http://localhost:5000/`
-
-### Running tests
-**Run the test suite**:
-   ```bash
-    rspec .
-   ```
