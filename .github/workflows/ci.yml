@@ -85,6 +85,7 @@ jobs:
         run: |
           sshpass -p $RASPBERRY_PI_PASSWORD ssh -o StrictHostKeyChecking=no \
           -o ServerAliveInterval=120 -o ServerAliveCountMax=100 pi@$RASPBERRY_PI_IP \
+          "bash -s" << 'EOF'
             # Navigate to the app directory
             echo "Navigating to the app directory..."
             cd /var/www/html/race
@@ -102,6 +103,7 @@ jobs:
         run: |
           sshpass -p $RASPBERRY_PI_PASSWORD ssh -o StrictHostKeyChecking=no \
           -o ServerAliveInterval=120 -o ServerAliveCountMax=100 pi@$RASPBERRY_PI_IP \
+          "bash -s" << 'EOF'
             # Navigate to the app directory
             echo "Navigating to the app directory..."
             cd /var/www/html/race
