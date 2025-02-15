@@ -1,48 +1,62 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { createUser } from '../../api/users_api';
 import { useNotification } from '../../context/NotificationContext';
+import ErrorMessage from '../../components/ErrorMessage';
 
 const UserNew = () => {
     const navigate = useNavigate();
-    const [name, setName] = useState('');
-    const [error, setError] = useState(null);
     const { showNotification } = useNotification();
+    const [errorMessage, setErrorMessage] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        console.log("handleSubmit triggered"); // Check that the form submission works
+    const {
+        register,
+        handleSubmit,
+        formState: { errors } } = useForm({
+        defaultValues: {
+            name: '',
+        },
+    });
+
+
+    const onSubmit = async (data) => {
         try {
-            await createUser({ name });
+            await createUser(data);
             showNotification('User created successfully', 'success');
             navigate('/users');
         } catch (err) {
-            setError(err.message);
-            showNotification("An error occurred, user couldn't be created", 'error');
+            if (err.response && err.response.data && err.response.data.errors) {
+                const errorMsg = Object.values(err.response.data.errors).flat().join(', ');
+            } else {
+                setErrorMessage(err.message);
+            }
         }
     };
 
     return (
         <div className="max-w-md mx-auto mt-8">
             <h2 className="text-2xl font-bold mb-4">Create a New User</h2>
-            {error && <div className="mb-4 text-red-500">{error}</div>}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <ErrorMessage message={errorMessage} />
                 <div>
-                    <label className="block mb-1" htmlFor="name">Name</label>
+                    <label htmlFor="name" className="block mb-1">Name</label>
                     <input
                         id="name"
                         type="text"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
+                        {...register('name', {
+                            required: "Name is required",
+                            minLength: { value: 3, message: "Name is too short (minimum is 3 characters)" },
+                        })}
                         className="border rounded p-2 w-full"
-                        required
                     />
+                    <ErrorMessage message={errors.name?.message} />
                 </div>
                 <button
                     type="submit"
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
                 >
-                    Create User
+                    Create user
                 </button>
             </form>
         </div>

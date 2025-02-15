@@ -16,7 +16,7 @@ RSpec.describe "Users Create", type: :system do
 
     it "creates a new user successfully" do
       fill_in "Name", with: "Charlie"
-      click_button "Create User"
+      click_button "Create user"
 
       expect(page).to have_text("Charlie")
 
@@ -26,11 +26,9 @@ RSpec.describe "Users Create", type: :system do
     it "displays an error message when the user name is too short" do
       fill_in "Name", with: "Ch"
 
-      click_button "Create User"
+      click_button "Create user"
 
       expect(page).to have_text("Name is too short (minimum is 3 characters)")
-
-      expect(page).to have_css('.MuiAlert-root', text: "An error occurred, user couldn't be created", wait: 10, visible: false)
     end
   end
 end

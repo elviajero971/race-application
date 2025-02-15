@@ -28,8 +28,7 @@ RSpec.describe "Users Update", type: :system do
       fill_in "Name", with: "Da"
       click_button "Update user"
 
-      expect(page).to have_text("Name is too short (minimum is 3 characters)")
-      expect(page).to have_css('.MuiAlert-root', text: "An error occurred, user couldn't be updated", wait: 10, visible: false)
+      expect(page).to have_text("Name must be at least 3 characters")
     end
   end
 end

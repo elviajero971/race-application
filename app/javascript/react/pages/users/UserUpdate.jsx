@@ -1,58 +1,72 @@
 import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchUser, updateUser } from '../../api/users_api';
 import { useNotification } from '../../context/NotificationContext';
+import ErrorMessage from "../../components/ErrorMessage";
 
 const UserUpdate = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const { showNotification } = useNotification();
-    const [name, setName] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setError,
+        formState: { errors },
+    } = useForm();
+
+    // Fetch user data and initialize form
     useEffect(() => {
         fetchUser(id)
-            .then(user => {
-                setName(user.name);
-                setLoading(false);
+            .then((user) => {
+                reset({ name: user.name });
             })
-            .catch(err => {
-                setError(err.message);
-                showNotification(err.message, 'error');
-                setLoading(false);
+            .catch((err) => {
+                setErrorMessage(err.message);
             });
-    }, [id, showNotification]);
+    }, [id, reset, showNotification]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const onSubmit = async (data) => {
         try {
-            await updateUser(id, { name });
+            await updateUser(id, data);
             showNotification("User updated successfully", "success");
             navigate('/users');
         } catch (err) {
-            setError(err.message);
-            showNotification("An error occurred, user couldn't be updated", 'error');
+            if (err.response && err.response.data && err.response.data.errors) {
+                const backendErrors = err.response.data.errors;
+                Object.keys(backendErrors).forEach((field) => {
+                    setError(field, {
+                        type: "server",
+                        message: backendErrors[field].join(", "),
+                    });
+                });
+            } else {
+                setErrorMessage(err.message);
+            }
         }
     };
-
-    if (loading) return <div className="text-center mt-8">Loading user data...</div>;
 
     return (
         <div className="max-w-md mx-auto mt-8">
             <h2 className="text-2xl font-bold mb-4">Edit User</h2>
-            {error && <div className="mb-4 text-red-500">Error: {error}</div>}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <ErrorMessage message={errorMessage} />
                 <div>
-                    <label className="block mb-1" htmlFor="name">Name</label>
+                    <label htmlFor="name" className="block mb-1">Name</label>
                     <input
                         id="name"
                         type="text"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
+                        {...register('name', {
+                            required: "Name is required",
+                            minLength: { value: 3, message: "Name must be at least 3 characters" },
+                        })}
                         className="border rounded p-2 w-full"
-                        required
                     />
+                    <ErrorMessage message={errors?.name?.message} />
                 </div>
                 <button
                     type="submit"
