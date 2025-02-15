@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-
 jobs:
   deploy:
     name: Build and Deploy Rails App
@@ -31,8 +30,6 @@ jobs:
           --tag elviajero34/race:latest . \
           --push
       
-      
-      
       # Transfer docker-compose.yml and nginx.conf to Raspberry Pi
       - name: Transfer docker-compose.yml to Raspberry Pi
         env:
@@ -49,8 +46,8 @@ jobs:
           # Transfer the nginx.conf file to the Raspberry Pi
           sshpass -p $RASPBERRY_PI_PASSWORD scp -o StrictHostKeyChecking=no nginx.conf pi@$RASPBERRY_PI_IP:/var/www/html/race/
 
-      # Deploy to Raspberry Pi
-      - name: SSH into Raspberry Pi and deploy
+      # Pull the latest image from Docker Hub
+      - name: Pull the latest image from Docker Hub
         env:
           RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
           RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
@@ -64,25 +61,50 @@ jobs:
               echo "Failed to pull Docker image from Docker Hub."
               exit 1
             fi
-          
+          EOF
+
+      # Remove old images except for the latest
+      - name: Remove old images except for the latest
+        env:
+          RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
+          RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
+        run: |
+          sshpass -p $RASPBERRY_PI_PASSWORD ssh -o StrictHostKeyChecking=no \
+          -o ServerAliveInterval=120 -o ServerAliveCountMax=100 pi@$RASPBERRY_PI_IP \
+          "bash -s" << 'EOF'
             # Remove old images except for the latest
             echo "Cleaning up old Docker images..."
             docker image prune -af --filter "label!=maintainer=elviajero34" || true
+          EOF
 
+      # Stopping and removing old containers
+      - name: Stopping and removing old containers
+        env:
+          RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
+          RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
+        run: |
+          sshpass -p $RASPBERRY_PI_PASSWORD ssh -o StrictHostKeyChecking=no \
+          -o ServerAliveInterval=120 -o ServerAliveCountMax=100 pi@$RASPBERRY_PI_IP \
             # Navigate to the app directory
             echo "Navigating to the app directory..."
             cd /var/www/html/race
 
-            # Ensure Docker is installed
-            echo "Installing Docker..."
-            if ! [ -x "$(command -v docker)" ]; then
-              curl -fsSL https://get.docker.com -o get-docker.sh
-              sh get-docker.sh
-            fi
-
             # Stop and remove old containers
             echo "Stopping and removing old containers..."
             docker-compose down --remove-orphans || true
+          EOF
+
+      # Starting new container and running database migrations
+      - name: Starting new container and running database migrations
+        env:
+          RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
+          RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
+        run: |
+          sshpass -p $RASPBERRY_PI_PASSWORD ssh -o StrictHostKeyChecking=no \
+          -o ServerAliveInterval=120 -o ServerAliveCountMax=100 pi@$RASPBERRY_PI_IP \
+            # Navigate to the app directory
+            echo "Navigating to the app directory..."
+            cd /var/www/html/race
 
             # Start the new containers
             echo "Starting the new containers..."
