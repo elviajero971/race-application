@@ -112,6 +112,10 @@ jobs:
             echo "Starting the new containers..."
             docker-compose up -d
           
+            # Check the status of the containers
+            echo "Checking the status of the containers..."
+            docker ps
+          
             # Create a new database if it doesn't exist
             echo "Creating a new database..."
             docker exec race-app-1 bundle exec rake db:create RAILS_ENV=production
