@@ -95,8 +95,8 @@ jobs:
             docker-compose down --remove-orphans || true
           EOF
 
-      # Starting new container and running database migrations
-      - name: Starting new container and running database migrations
+      # Starting new container
+      - name: Starting new container
         env:
           RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
           RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
@@ -111,6 +111,20 @@ jobs:
             # Start the new containers
             echo "Starting the new containers..."
             docker-compose up -d
+          EOF
+
+      # Running database migrations
+      - name: Running database migrations
+        env:
+          RASPBERRY_PI_PASSWORD: ${{ secrets.RASPBERRY_PI_PASSWORD }}
+          RASPBERRY_PI_IP: ${{ secrets.RASPBERRY_PI_IP }}
+        run: |
+          sshpass -p $RASPBERRY_PI_PASSWORD ssh -o StrictHostKeyChecking=no \
+          -o ServerAliveInterval=120 -o ServerAliveCountMax=100 pi@$RASPBERRY_PI_IP \
+          "bash -s" << 'EOF'
+            # Navigate to the app directory
+            echo "Navigating to the app directory..."
+            cd /var/www/html/race
           
             # Check the status of the containers
             echo "Checking the status of the containers..."
