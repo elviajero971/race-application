@@ -43,3 +43,6 @@
 
 # remove all keep files
 *.keep
+
+# remove all coverage files
+coverage/
