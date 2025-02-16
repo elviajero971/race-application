@@ -4,9 +4,8 @@ import {
     createUser,
     updateUser,
     deleteUser,
-} from '../../api/users_api'; // adjust the path as needed
+} from '../../api/users_api';
 
-// Clear any previous mock on global fetch
 global.fetch = jest.fn();
 
 describe('users_api', () => {

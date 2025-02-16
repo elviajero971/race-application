@@ -9,7 +9,6 @@ export const useRaceData = (raceId) => {
     const loadRaceData = useCallback(async () => {
         try {
             const raceData = await fetchRace(raceId);
-            // The raceData now includes race_participants with nested user info.
             setRace(raceData);
             setLoading(false);
         } catch (err) {

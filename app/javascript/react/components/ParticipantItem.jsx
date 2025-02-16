@@ -1,4 +1,3 @@
-// src/components/ParticipantItem.jsx
 import React from 'react';
 import { LaneIcon, MedalIcon } from './Icons';
 

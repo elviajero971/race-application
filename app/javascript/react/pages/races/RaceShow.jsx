@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ParticipantItem from '../../components/ParticipantItem';
-import { sortParticipantsByPosition } from '../../utils/sortParticipants';
+import { sortParticipantsByPosition } from '../../utils/sortParticipantsByPosition';
 import { useRaceData } from '../../hooks/useRaceData';
 import { dateFormating } from '../../utils/dataFormating';
 
