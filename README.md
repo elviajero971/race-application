@@ -73,7 +73,12 @@ You can access the live demo of the app by visiting the following link:
 - Open your browser and navigate to `http://localhost:3005/`
 
 ### Running tests
-**Run the test suite**:
+**Run the rspec test suite**:
    ```bash
     docker exec -e RAILS_ENV=test -it container_name bundle exec rspec
+   ```
+
+**Run the jest test suite**:
+   ```bash
+    docker exec -it container_name yarn test
    ```
