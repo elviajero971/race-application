@@ -55,6 +55,26 @@ FROM ruby:3.2.0-slim-bullseye
 
 WORKDIR /app
 
+# Install OS-level dependencies needed for Selenium tests (chromium and chromium-driver)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium \
+    chromium-driver \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js and Yarn in production
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && curl -sL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g yarn \
+    && rm -rf /var/lib/apt/lists/*
+
+# Verify Node.js and Yarn versions (for debugging)
+RUN node --version && yarn --version
+
+# Make sure Yarn is in the PATH (typically it gets installed in /root/.yarn/bin)
+ENV PATH="/root/.yarn/bin:/usr/local/bin:$PATH"
+
 # Copy installed gems from builder stage
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 
