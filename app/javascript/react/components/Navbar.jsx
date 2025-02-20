@@ -15,12 +15,12 @@ const Navbar = () => {
             <ul className="flex gap-4">
                 <li>
                     <Link to="/" className={isRaceActive ? activeClasses : inactiveClasses}>
-                        List of races
+                        Go to races
                     </Link>
                 </li>
                 <li>
                     <Link to="/users" className={isUserActive ? activeClasses : inactiveClasses}>
-                        List of users
+                        Go to users
                     </Link>
                 </li>
             </ul>
