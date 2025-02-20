@@ -6,7 +6,7 @@ RSpec.describe "Users Destroy", type: :system do
       User.delete_all
       @user = create(:user, name: "Eve")
       visit root_path
-      click_on "List of users"
+      click_on "Go to users"
     end
 
     it "allows deleting a user and updates the list" do

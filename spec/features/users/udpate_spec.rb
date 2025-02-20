@@ -6,7 +6,7 @@ RSpec.describe "Users Update", type: :system do
       User.delete_all
       @user = create(:user, name: "Dave")
       visit root_path
-      click_on "List of users"
+      click_on "Go to users"
       find('button[aria-label="Update user"]').click
     end
 

@@ -6,7 +6,7 @@ RSpec.describe "Users index page", type: :system do
   describe "visiting the users index page" do
     before do
       visit root_path
-      click_on "List of users"
+      click_on "Go to users"
     end
 
     it "displays the welcome message" do
@@ -17,7 +17,7 @@ RSpec.describe "Users index page", type: :system do
       before do
         User.delete_all
         visit root_path
-        click_on "List of users"
+        click_on "Go to users"
       end
 
       it "displays the header with no users messages" do
@@ -37,7 +37,7 @@ RSpec.describe "Users index page", type: :system do
         @user1 = create(:user, name: "Alice")
         @user2 = create(:user, name: "Bob")
         visit root_path
-        click_on "List of users"
+        click_on "Go to users"
       end
 
       it "displays the users' names" do

@@ -5,7 +5,7 @@ RSpec.describe "Users Create", type: :system do
     before do
       User.delete_all
       visit root_path
-      click_on "List of users"
+      click_on "Go to users"
       click_on "Create a new user"
     end
 
