@@ -4,8 +4,7 @@ export const fetchRaces = async () => {
         if (!response.ok) {
             throw new Error('Error fetching races');
         }
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         throw error;
     }
@@ -17,8 +16,7 @@ export const fetchRace = async (id) => {
         if (!response.ok) {
             throw new Error('Error fetching race');
         }
-        const data = await response.json();
-        return data;
+        return await response.json();
     } catch (error) {
         throw error;
     }
@@ -44,7 +42,7 @@ export const createRace = async (raceData) => {
 export const updateRace = async (id, raceData) => {
     try {
         const response = await fetch(`/api/v1/races/${id}`, {
-            method: 'PUT', // or PATCH if you prefer
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ race: raceData }),
         });

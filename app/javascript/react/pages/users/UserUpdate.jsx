@@ -19,14 +19,14 @@ const UserUpdate = () => {
         formState: { errors },
     } = useForm();
 
-    // Fetch user data and initialize form
+
     useEffect(() => {
         fetchUser(id)
             .then((user) => {
                 reset({ name: user.name });
             })
             .catch((err) => {
-                setErrorMessage(err.message);
+                navigate("/notfound", { replace: true });
             });
     }, [id, reset, showNotification]);
 
