@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useCallback } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 
 const NotificationContext = createContext();
@@ -10,9 +10,9 @@ export const NotificationProvider = ({ children }) => {
         severity: 'info', // 'error', 'warning', 'success', 'info'
     });
 
-    const showNotification = (message, severity = 'info') => {
+    const showNotification = useCallback((message, severity = 'info') => {
         setNotification({ open: true, message, severity });
-    };
+    }, []);
 
     const closeNotification = (event, reason) => {
         if (reason === 'clickaway') return;
