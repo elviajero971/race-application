@@ -1,23 +1,22 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { NotificationProvider } from './context/NotificationContext';
-import Navbar from "./components/Navbar";
+import MainLayout from './layouts/MainLayout';
 import RacesIndex from './pages/races/RacesIndex';
 import RaceShow from './pages/races/RaceShow';
 import RaceNew from './pages/races/RaceNew';
 import RaceUpdate from './pages/races/RaceUpdate';
-import UsersIndex from "./pages/users/UsersIndex";
-import UserNew from "./pages/users/UserNew";
-import UserUpdate from "./pages/users/UserUpdate";
+import UsersIndex from './pages/users/UsersIndex';
+import UserNew from './pages/users/UserNew';
+import UserUpdate from './pages/users/UserUpdate';
+import NoNavBarLayout from './layouts/NoNavBarLayout';
 
 const App = () => {
     return (
         <NotificationProvider>
             <Router>
-                <div className="text-center min-h-screen flex flex-col items-center justify-start box-border bg-white mx-5 mb-5">
-                    <h1 className="text-4xl font-bold text-gray-800 mt-5">Race management dashboard</h1>
-                    <Navbar />
-                    <Routes>
+                <Routes>
+                    <Route element={<MainLayout />}>
                         <Route path="/" element={<RacesIndex />} />
                         <Route path="/races/new" element={<RaceNew />} />
                         <Route path="/races/:id/edit" element={<RaceUpdate />} />
@@ -25,8 +24,10 @@ const App = () => {
                         <Route path="/users" element={<UsersIndex />} />
                         <Route path="/users/new" element={<UserNew />} />
                         <Route path="/users/:id/edit" element={<UserUpdate />} />
-                    </Routes>
-                </div>
+                    </Route>
+                    <Route path="*" element={<NoNavBarLayout />} />
+                    <Route path="/notfound" element={<NoNavBarLayout />} />
+                </Routes>
             </Router>
         </NotificationProvider>
     );
