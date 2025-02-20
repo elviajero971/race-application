@@ -43,6 +43,10 @@ const ParticipantRow = ({
                 })}
                 className="border rounded p-2 w-full"
                 min="1"
+                onWheel={(e) => {
+                    e.target.blur();
+                    e.preventDefault();
+                }}
             />
             <ErrorMessage message={errors?.race_participants_attributes?.[index]?.lane?.message} />
         </div>
@@ -61,6 +65,10 @@ const ParticipantRow = ({
                     })}
                     className="border rounded p-2 w-full"
                     min="1"
+                    onWheel={(e) => {
+                        e.target.blur();
+                        e.preventDefault();
+                    }}
                 />
                 <ErrorMessage message={errors?.race_participants_attributes?.[index]?.position?.message} />
             </div>
