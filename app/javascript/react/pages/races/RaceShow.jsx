@@ -15,11 +15,11 @@ const RaceShow = () => {
     }
 
     if (error) {
-        return <div className="text-center mt-4 text-red-500">Error: {error}</div>;
+        navigate("/notfound", { replace: true });
     }
 
     if (!race) {
-        return <div className="text-center mt-4">No race found.</div>;
+        navigate("/notfound", { replace: true });
     }
 
     const sortedParticipants = sortParticipantsByPosition(race.race_participants);

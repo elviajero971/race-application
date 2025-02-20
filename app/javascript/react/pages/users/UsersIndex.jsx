@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchUsers, deleteUser } from '../../api/users_api';
-import { DeleteIcon, UpdateIcon } from "../../components/Icons";
+import {DeleteIcon, SpinnerIcon, UpdateIcon} from "../../components/Icons";
 import { useNotification } from '../../context/NotificationContext';
 
 const UsersIndex = () => {
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const { showNotification } = useNotification();
 
     useEffect(() => {
@@ -15,10 +16,11 @@ const UsersIndex = () => {
             .then((data) => {
                 setUsers(data);
                 setLoading(false);
+                console.log('users datas', data);
             })
             .catch((err) => {
-                setError(err.message);
                 setLoading(false);
+                setError(err.message);
             });
     }, []);
 
@@ -39,14 +41,21 @@ const UsersIndex = () => {
     };
 
     if (loading) {
-        return <div className="text-center mt-4">Loading users...</div>;
+        return (
+            <div className="w-full h-64 flex items-center justify-center">
+                <SpinnerIcon />
+            </div>);
+    }
+
+    if (error) {
+        return <div className="text-center mt-4 text-red-500">Error: {error}</div>;
     }
 
     return (
         <div className='relative w-full max-w-3xl mx-auto'>
             <div className="mt-8">
                 <div className='flex justify-between items-center'>
-                    <h2 className="text-2xl font-bold mb-4">Users</h2>
+                    <h2 className="text-2xl font-bold mb-4">List of users</h2>
                     <Link
                         to="/users/new"
                         className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"

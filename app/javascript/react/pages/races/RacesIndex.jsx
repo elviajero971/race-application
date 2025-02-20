@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchRaces, deleteRace } from '../../api/races_api';
-import { UserIcon, ViewDetailsIcon, DeleteIcon} from "../../components/Icons";
+import { UserIcon, ViewDetailsIcon, DeleteIcon, SpinnerIcon } from "../../components/Icons";
 import { dateFormating } from "../../utils/dataFormating";
 import { useNotification } from "../../context/NotificationContext";
 
@@ -40,7 +40,10 @@ const RacesIndex = () => {
     };
 
     if (loading) {
-        return <div className="text-center mt-4">Loading races...</div>;
+        return (
+            <div className="w-full h-64 flex items-center justify-center">
+                <SpinnerIcon />
+            </div>);
     }
 
     if (error) {
@@ -51,7 +54,7 @@ const RacesIndex = () => {
         <div className='relative w-full max-w-3xl mx-auto'>
             <div className="mt-8">
                 <div className='flex justify-around items-center'>
-                    <h2 className="text-2xl font-bold mb-4">Races</h2>
+                    <h2 className="text-2xl font-bold mb-4">List of races</h2>
                     <Link to="/races/new" className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
                         Create a new race
                     </Link>
