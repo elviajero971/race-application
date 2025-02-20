@@ -7,6 +7,7 @@ import {
     UserIcon,
     LaneIcon,
     MedalIcon,
+    SpinnerIcon,
 } from '../../components/Icons';
 
 describe('Icon components', () => {
@@ -57,7 +58,6 @@ describe('Icon components', () => {
         const { container } = render(<LaneIcon />);
         const svgElement = container.querySelector('svg');
         expect(svgElement).toBeInTheDocument();
-        // Check that it has the margin-right and green text classes
         expect(svgElement).toHaveClass('mr-1');
         expect(svgElement).toHaveClass('text-green-500');
     });
@@ -68,5 +68,13 @@ describe('Icon components', () => {
         expect(svgElement).toBeInTheDocument();
         expect(svgElement).toHaveClass('mr-1');
         expect(svgElement).toHaveClass('text-yellow-500');
+    });
+
+    test('SpinnerIcon renders with correct classes', () => {
+        const { container } = render(<SpinnerIcon />);
+        const svgElement = container.querySelector('svg');
+        expect(svgElement).toBeInTheDocument();
+        expect(svgElement).toHaveClass('animate-spin');
+        expect(svgElement).toHaveClass('text-blue-500');
     });
 });
